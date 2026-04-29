@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,400;0,700;0,800;0,900;1,400;1,900&amp;family=Space+Grotesk:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "background": "#f9f9f9",
+                      "primary-container": "#1b1b1b",
+                      "secondary-fixed": "#c3f400",
+                      "on-background": "#1b1b1b",
+                      "tertiary-fixed": "#e2e2e2",
+                      "tertiary": "#000000",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#e2e2e2",
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f3f3f3",
+                      "on-surface-variant": "#4c4546",
+                      "secondary-fixed-dim": "#abd600",
+                      "surface-variant": "#e2e2e2",
+                      "on-primary-fixed-variant": "#474747",
+                      "surface-dim": "#dadada",
+                      "inverse-on-surface": "#f1f1f1",
+                      "outline-variant": "#cfc4c5",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-tint": "#5e5e5e",
+                      "secondary": "#506600",
+                      "on-primary-fixed": "#1b1b1b",
+                      "on-primary-container": "#848484",
+                      "surface-bright": "#f9f9f9",
+                      "on-secondary": "#ffffff",
+                      "on-surface": "#1b1b1b",
+                      "tertiary-container": "#1a1c1c",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "surface-container": "#eeeeee",
+                      "on-secondary-fixed-variant": "#3c4d00",
+                      "primary-fixed-dim": "#c6c6c6",
+                      "on-tertiary-fixed-variant": "#454747",
+                      "secondary-container": "#c1f100",
+                      "surface-container-high": "#e8e8e8",
+                      "on-secondary-container": "#546b00",
+                      "inverse-surface": "#303030",
+                      "inverse-primary": "#c6c6c6",
+                      "surface": "#f9f9f9",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#161e00",
+                      "on-error-container": "#93000a",
+                      "primary": "#000000",
+                      "outline": "#7e7576",
+                      "on-error": "#ffffff",
+                      "primary-fixed": "#e2e2e2",
+                      "on-tertiary-container": "#838484",
+                      "tertiary-fixed-dim": "#c6c6c7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-edge": "2rem",
+                      "unit": "4px",
+                      "offset-shift": "8px",
+                      "gutter": "1.5rem"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Epilogue"],
+                      "headline-xl": ["Epilogue"],
+                      "body-md": ["Space Grotesk"],
+                      "stamp-lg": ["Epilogue"],
+                      "mono-sm": ["Space Grotesk"]
+              },
+              "fontSize": {
+                      "headline-lg": ["2.5rem", {"lineHeight": "1.0", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "headline-xl": ["4.5rem", {"lineHeight": "0.9", "letterSpacing": "-0.05em", "fontWeight": "900"}],
+                      "body-md": ["1rem", {"lineHeight": "1.5", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                      "stamp-lg": ["1.25rem", {"lineHeight": "1", "fontWeight": "700"}],
+                      "mono-sm": ["0.875rem", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .torn-edge-bottom {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 92%, 98% 95%, 95% 91%, 92% 96%, 88% 92%, 85% 98%, 80% 93%, 75% 97%, 70% 91%, 65% 95%, 60% 92%, 55% 98%, 50% 91%, 45% 96%, 40% 92%, 35% 98%, 30% 91%, 25% 96%, 20% 92%, 15% 98%, 10% 92%, 5% 96%, 0% 92%);
+        }
+        .torn-edge-top {
+            clip-path: polygon(0% 8%, 5% 4%, 10% 8%, 15% 2%, 20% 8%, 25% 4%, 30% 9%, 35% 2%, 40% 8%, 45% 4%, 50% 9%, 55% 2%, 60% 8%, 65% 5%, 70% 9%, 75% 3%, 80% 7%, 85% 2%, 90% 8%, 95% 4%, 100% 8%, 100% 100%, 0% 100%);
+        }
+        .dither {
+            filter: contrast(200%) grayscale(100%) brightness(100%);
+            image-rendering: pixelated;
+        }
+        .paper-grain {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        .hand-draw-circle {
+            border: 3px solid #000;
+            border-radius: 48% 52% 45% 55% / 54% 46% 54% 46%;
+            padding: 0.5rem 1rem;
+        }
+        .offset-1 { transform: translate(4px, -4px); }
+        .offset-2 { transform: translate(-6px, 6px) rotate(-1deg); }
+        .offset-3 { transform: translate(8px, 8px) rotate(1deg); }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background min-h-screen selection:bg-secondary-fixed selection:text-black">
+<div class="fixed inset-0 paper-grain z-50"></div>
+<nav class="sticky top-0 w-full border-b-4 border-black bg-white z-[60] flex justify-between items-center px-6 py-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+<div class="text-3xl font-headline-xl italic bg-secondary-fixed text-black px-4 -rotate-2 border-2 border-black">
+            HACK_ZINE
+        </div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-headline-lg text-sm uppercase tracking-tighter bg-secondary-fixed text-black underline decoration-4 underline-offset-4 px-2 hover:bg-black hover:text-white transition-transform hover:-translate-y-1" href="#">SCHEDULE</a>
+<a class="font-headline-lg text-sm uppercase tracking-tighter text-black hover:bg-black hover:text-white transition-transform hover:-translate-y-1 px-2" href="#">RESOURCES</a>
+<a class="font-headline-lg text-sm uppercase tracking-tighter text-black hover:bg-black hover:text-white transition-transform hover:-translate-y-1 px-2" href="#">COUNTDOWN</a>
+<button class="bg-black text-white px-6 py-2 font-headline-lg text-sm border-2 border-black shadow-[4px_4px_0px_0px_rgba(195,244,0,1)] active:translate-y-1 active:shadow-none transition-all">
+                REGISTER
+            </button>
+</div>
+<button class="md:hidden">
+<span class="material-symbols-outlined text-4xl">menu</span>
+</button>
+</nav>
+<main class="max-w-7xl mx-auto px-4 py-12 relative">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<section class="lg:col-span-8 flex flex-col gap-12">
+<div class="relative bg-white border-4 border-black p-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] torn-edge-bottom -rotate-1">
+<div class="absolute -top-4 -right-4 bg-secondary-fixed text-black px-4 py-1 border-2 border-black font-mono-sm rotate-3">
+                        URGENT // LIVE
+                    </div>
+<h2 class="font-headline-lg text-primary uppercase mb-6 flex items-center gap-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sensors</span>
+                        HAPPENING NOW
+                    </h2>
+<div class="flex flex-col md:flex-row gap-8 items-center">
+<div class="flex-1">
+<div class="inline-block hand-draw-circle mb-4 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
+<h3 class="font-headline-xl text-3xl uppercase leading-none">Vaporwave Shader Workshop</h3>
+</div>
+<p class="text-lg font-body-md mb-6 leading-relaxed max-w-md">
+                                Dive into the aesthetics of the early web. We're breaking GLSL pipelines to create nostalgic dither effects. No experience required, just a laptop and caffeine.
+                            </p>
+<div class="flex gap-4">
+<span class="bg-black text-white px-3 py-1 font-mono-sm uppercase rotate-1">Room 404</span>
+<span class="bg-secondary-fixed text-black px-3 py-1 font-mono-sm uppercase -rotate-2 border border-black">Level: Brutalist</span>
+</div>
+</div>
+<div class="w-full md:w-64 h-64 border-4 border-black overflow-hidden rotate-2 shadow-[8px_8px_0px_0px_rgba(195,244,0,1)]">
+<img alt="abstract digital code patterns on a screen in black and white" class="w-full h-full object-cover dither" data-alt="dithered high contrast black and white image of computer code scrolling on a vintage monitor screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT5gRbAKg-49IBna2Bis67e28IBP3d5Jfxot9KRDleMip1tbzNVRNQLuuGhGxs-xCymLg_xrb3cttaWTEvtfs2IdJ82cSHP0YkF2Zcc0cDtuEx3ARiFeuQMSkCiUegbeFixZdkaivyQEoxkDE5youoHyb8lCFjXP7p7PnsvEdPWjc9a1cbeNFUkl3wMRmxng6qlBaYSxzH5X7ArKL-16jd0B0YUzxnIJnoKk0HkzTH4O6bM3am_tvdooBUKPwvNfu3xS5gU6bdZ2I"/>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<article class="bg-white border-2 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rotate-1 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<span class="font-mono-sm bg-black text-white px-2">VOL_04</span>
+<span class="material-symbols-outlined">push_pin</span>
+</div>
+<h4 class="font-headline-lg text-xl uppercase underline decoration-secondary-fixed decoration-4">The Pizza Shortage Crisis</h4>
+<p class="font-body-md text-sm italic">"The local delivery guy was seen fleeing the premises with an empty box. We are currently investigating the missing pepperoni logs."</p>
+<img alt="greyscale pizza box on concrete" class="w-full h-32 object-cover dither border-t-2 border-black" data-alt="high contrast black and white dithered photo of a discarded pizza box on a rough city sidewalk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB723tIkHSY_GyRYqCMxbtTG-R_1pYeM0L2PVQzcj-UpiJlgh0cQ5MOyIuk0XyNz1tix1Ip60Ar2csQRJFkgRFbrOxz388KiAHoud-tSzVi1uAjULcMAfoxQa5Z2ly4LujuKVlmWT6jjJSMV3Zfk6mb80W7MggBE9aRmwvx2JTWTh5VtNKJyZ3S1Xdo0urUBrz3zNA9GkxylZoMEV0nNY4ViAyfe5OgIQUhpcPMX44m-kAmK295Ge5dxpLLWd0CoMDWVhj1lTSDC_g"/>
+</article>
+<article class="bg-secondary-fixed border-2 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] -rotate-1 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<span class="font-mono-sm text-black border-b border-black">ANNOUNCEMENT</span>
+<span class="material-symbols-outlined">campaign</span>
+</div>
+<h4 class="font-headline-lg text-xl uppercase">GitHub Action: REVOLUTION</h4>
+<p class="font-body-md text-sm font-bold">New API endpoints are live for the scavenger hunt. First person to ping 'COFFEE_BOT' wins a mechanical keyboard.</p>
+<div class="mt-auto pt-4 border-t border-black/20 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="font-mono-sm text-xs">2 MINS AGO</span>
+</div>
+</article>
+</div>
+</section>
+<aside class="lg:col-span-4 flex flex-col gap-8 sticky top-28">
+<div class="bg-black text-white p-8 border-4 border-black shadow-[12px_12px_0px_0px_rgba(195,244,0,1)]">
+<h2 class="font-headline-lg text-2xl uppercase mb-8 border-b-2 border-secondary-fixed pb-2 flex justify-between">
+                        NEXT UP
+                        <span class="material-symbols-outlined">timer</span>
+</h2>
+<div class="flex flex-col gap-4 items-center">
+<div class="flex gap-2 items-baseline">
+<span class="text-7xl font-headline-xl text-secondary-fixed rotate-[-5deg]">00</span>
+<span class="text-3xl font-headline-xl">:</span>
+<span class="text-7xl font-headline-xl rotate-[3deg]">42</span>
+<span class="text-3xl font-headline-xl">:</span>
+<span class="text-7xl font-headline-xl text-secondary-fixed rotate-[-2deg]">15</span>
+</div>
+<div class="flex justify-around w-full font-mono-sm text-xs opacity-70">
+<span>HOURS</span>
+<span>MINS</span>
+<span>SECS</span>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-white/20">
+<p class="font-headline-lg text-lg uppercase text-secondary-fixed mb-1">KEYNOTE SPEECH</p>
+<p class="font-body-md text-sm italic opacity-80">"Breaking the Fourth Wall of UI Design" by @glitch_queen</p>
+</div>
+</div>
+<div class="bg-white border-2 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rotate-2 relative">
+<div class="absolute -top-3 left-4 bg-white border border-black px-2 py-1 flex gap-1">
+<div class="w-2 h-2 rounded-full bg-red-500"></div>
+<div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="w-2 h-2 rounded-full bg-green-500"></div>
+</div>
+<h3 class="font-headline-lg text-lg uppercase mb-4 mt-2">NETWORK_STATUS</h3>
+<div class="space-y-3">
+<div class="flex justify-between items-center border-b border-dashed border-black pb-1">
+<span class="font-mono-sm">WIFI_SSID</span>
+<span class="font-bold">HACK_ZINE_EXTREME</span>
+</div>
+<div class="flex justify-between items-center border-b border-dashed border-black pb-1">
+<span class="font-mono-sm">LATENCY</span>
+<span class="text-green-600 font-bold">12ms</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-mono-sm">UPLINK</span>
+<span class="bg-black text-white px-1">ACTIVE</span>
+</div>
+</div>
+</div>
+<div class="group relative cursor-pointer">
+<div class="absolute inset-0 bg-secondary-fixed border-2 border-black translate-x-2 translate-y-2 group-hover:translate-x-1 group-hover:translate-y-1 transition-transform"></div>
+<button class="relative w-full bg-white border-2 border-black p-4 font-headline-lg text-xl uppercase flex items-center justify-between group-hover:bg-black group-hover:text-white transition-colors">
+                        JOIN DISCORD
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</aside>
+</div>
+<section class="mt-20">
+<h2 class="font-headline-xl text-5xl uppercase mb-12 -rotate-1 inline-block bg-black text-white px-6">LATEST_CLIPPINGS</h2>
+<div class="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+<div class="break-inside-avoid bg-white p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-rotate-1 transition-transform">
+<p class="font-mono-sm text-xs opacity-50 mb-2">14:20 // OCT 24</p>
+<h5 class="font-headline-lg text-lg mb-3">HARDWARE LAB NOW OPEN</h5>
+<p class="text-sm leading-relaxed mb-4">Solder suckers and breadboards are available in the basement. Please do not eat the resistors. They are not candies.</p>
+<img alt="electronic circuit board closeup" class="w-full grayscale contrast-150 dither border border-black" data-alt="macro dithered black and white photo of a complex green circuit board with various resistors and capacitors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArH3X90Yw2vApzfbzksnn_z8lJnISRW0A5qBsZurnzPd4PHT8FmTWTkYpwtNCgU87ozeMyNpgr77lQQ0C798oqsBlT2yzA9C2ssCJ8Wf0EDlpjB4fA4HibX19qNBmZdw2jk1MUCDZREFkUEH2hDtSBTjwHKC2-B6Uy59FhvFDY6kQWcmS_NaAUqFmbIYSdjwb2RU7O_MZi6U-j7Z19sOfOOpXiSuUBgEvJwLOn2ZO6OkmZAJWkQlstmw0jZabG_HOgN1m7HAdD0RI"/>
+</div>
+<div class="break-inside-avoid bg-secondary-fixed p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-1">
+<h5 class="font-headline-lg text-lg mb-3 uppercase">WANTED: RE-ACT DEVS</h5>
+<p class="text-sm italic mb-2">"Looking for someone who can debug a state machine while blindfolded. Reward: Eternal glory and a sticker pack."</p>
+<div class="bg-black h-1 w-full my-4"></div>
+<p class="font-mono-sm text-xs">CONTACT: @STAMP_ADMIN</p>
+</div>
+<div class="break-inside-avoid bg-white p-6 border-2 border-black shadow-[8px_8px_0px_0px_rgba(195,244,0,1)] -rotate-1">
+<img alt="abstract shapes" class="w-full h-40 object-cover dither mb-4" data-alt="abstract monochromatic grain texture with sharp geometric shapes and photocopy noise artifacts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXD5Z1EPHdP2_hbdeYveyl8i7wqQjXw6Z9JbpWmSvph5EJfr501XTwvzplhlHtGJYfoKGjWoOcalxF12HibBWS2F4aanEDosYvHgJTSk0UZsdn_ivS9-Rx0U57Edq1MHJ8fcutsg3rv5_uHAuxXsFQ6U7abUCvBgixjcabS80j3ync7O0rGoCqyHsrSwctaD-2btLv6-T06KVJR2ont8NktouGP5HvAr--7R46e5KrnVTo7MTLpuEL1o3b0OQRK-CHOJlm-yYUCBo"/>
+<h5 class="font-headline-lg text-lg mb-3">DESIGN CHALLENGE</h5>
+<p class="text-sm">Redesign the hackathon logo using only standard Windows 95 icons. Deadline is midnight tonight. No exceptions.</p>
+</div>
+<div class="break-inside-avoid bg-white p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+<p class="font-mono-sm text-xs text-red-600 font-bold mb-2">ALERT_LOW_BATTERY</p>
+<p class="font-headline-lg text-md uppercase">Charging stations moved to the North Hall. Bring your own cables or perish.</p>
+</div>
+</div>
+</section>
+</main>
+<footer class="w-full bg-white border-t-2 border-dashed border-black py-16 px-10 flex flex-col md:flex-row justify-around items-center mt-20 relative overflow-hidden">
+<div class="absolute bottom-0 left-0 text-[120px] font-headline-xl opacity-5 select-none -z-10 pointer-events-none">ZINE_2024</div>
+<div class="flex flex-col items-center md:items-start gap-4 mb-8 md:mb-0">
+<div class="text-2xl font-headline-xl italic bg-black text-white px-3 -rotate-1">STAMP_LIVE</div>
+<p class="font-['Epilogue'] italic text-sm opacity-70">SCRIBBLED_BY_ADMIN_2024</p>
+</div>
+<div class="flex flex-wrap justify-center gap-12">
+<div class="flex flex-col gap-2">
+<span class="font-mono-sm font-bold border-b-2 border-black pb-1 mb-2">LINKS</span>
+<a class="font-['Epilogue'] italic text-sm opacity-70 hover:opacity-100 hover:line-through transition-opacity" href="#">PRIVACY</a>
+<a class="font-['Epilogue'] italic text-sm opacity-70 hover:opacity-100 hover:line-through transition-opacity" href="#">TOS</a>
+<a class="font-['Epilogue'] italic text-sm opacity-70 hover:opacity-100 hover:line-through transition-opacity" href="#">CONTACT</a>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-mono-sm font-bold border-b-2 border-black pb-1 mb-2">SOCIAL</span>
+<a class="font-['Epilogue'] italic text-sm opacity-70 hover:opacity-100 hover:line-through transition-opacity" href="#">TWITCH</a>
+<a class="font-['Epilogue'] italic text-sm opacity-70 hover:opacity-100 hover:line-through transition-opacity" href="#">MASTODON</a>
+<a class="font-['Epilogue'] italic text-sm opacity-70 hover:opacity-100 hover:line-through transition-opacity" href="#">X_COMM</a>
+</div>
+</div>
+</footer>
+<div class="fixed bottom-8 right-8 z-[70] hidden md:block">
+<button class="bg-secondary-fixed text-black p-4 border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">help</span>
+</button>
+</div>
+</body></html>
