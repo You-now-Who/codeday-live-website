@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Sidebar-aware main offset (set via --sidebar-w CSS var from JS) ────────── */
+
+@media (min-width: 768px) {
+  .sidebar-main {
+    margin-left: var(--sidebar-w, 192px);
+    transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* ─── Dot grid body background ──────────────────────────────────────────────── */
+
+@layer base {
+  body {
+    background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+}
+
+/* ─── Torn paper edges (headers only) ──────────────────────────────────────── */
+
+.torn-edge-bottom {
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 88%,
+    97% 92%, 94% 88%, 91% 93%, 88% 89%, 85% 94%,
+    82% 90%, 79% 95%, 76% 91%, 73% 96%, 70% 92%,
+    67% 97%, 64% 93%, 61% 98%, 58% 94%, 55% 99%,
+    52% 95%, 49% 100%, 46% 96%, 43% 100%, 40% 95%,
+    37% 99%, 34% 94%, 31% 98%, 28% 93%, 25% 97%,
+    22% 92%, 19% 96%, 16% 91%, 13% 95%, 10% 90%,
+    7% 94%, 4% 89%, 0% 93%
+  );
+}
+
+.torn-edge-top {
+  clip-path: polygon(
+    0% 7%, 3% 11%, 6% 7%, 9% 12%, 12% 8%,
+    15% 13%, 18% 9%, 21% 14%, 24% 10%,
+    27% 15%, 30% 11%, 33% 16%, 36% 12%,
+    39% 7%, 42% 11%, 45% 6%, 48% 10%,
+    51% 5%, 54% 9%, 57% 4%, 60% 8%,
+    63% 3%, 66% 7%, 69% 2%, 72% 6%,
+    75% 1%, 78% 5%, 81% 0%, 84% 4%,
+    87% 0%, 90% 5%, 93% 1%, 96% 6%, 100% 2%,
+    100% 100%, 0% 100%
+  );
+}
+
+/* ─── High-contrast dither effect ──────────────────────────────────────────── */
+
+.dither {
+  filter: contrast(1.8) grayscale(1) brightness(1.1);
+}
+
+/* ─── Paper grain overlay (applied to <body>) ───────────────────────────────── */
+
+.paper-grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* ─── Button press effect ───────────────────────────────────────────────────── */
+
+.btn-press {
+  transition: transform 0.05s, box-shadow 0.05s;
+}
+
+.btn-press:hover {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* ─── Card hover lift ───────────────────────────────────────────────────────── */
+
+.card-lift {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-lift:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+}
+
+/* ─── Collage offset rotations ──────────────────────────────────────────────── */
+
+.offset-1 { transform: rotate(-1.5deg) translate(-2px, 1px); }
+.offset-2 { transform: rotate(1deg) translate(2px, -1px); }
+.offset-3 { transform: rotate(-0.5deg) translate(1px, 2px); }
+
+/* ─── Hand-drawn circle for icon buttons ────────────────────────────────────── */
+
+.hand-draw-circle {
+  border-radius: 50% 45% 48% 50% / 50% 48% 45% 50%;
+  border: 2px solid black;
+}
+
+/* ─── Keyframe animations ───────────────────────────────────────────────────── */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes live-dot {
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%       { transform: scale(1.5); opacity: 0.5; }
+}
+
+@keyframes float-a {
+  0%, 100% { transform: translateY(0px) rotate(-1.5deg); }
+  50%       { transform: translateY(-8px) rotate(-1.5deg); }
+}
+
+@keyframes float-b {
+  0%, 100% { transform: translateY(0px) rotate(0.5deg); }
+  50%       { transform: translateY(-5px) rotate(0.5deg); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50%       { transform: rotate(3deg); }
+}
+
+/* Animation utility classes */
+
+.animate-fade-up          { animation: fade-up 0.45s ease both; }
+.animate-live-dot         { animation: live-dot 1.2s ease infinite; }
+.animate-float-a          { animation: float-a 4.5s ease-in-out infinite; }
+.animate-float-b          { animation: float-b 5.5s ease-in-out infinite; }
+.animate-spin-slow        { animation: spin-slow 12s linear infinite; }
+.animate-wiggle           { animation: wiggle 0.6s ease-in-out infinite; }
+
+/* Staggered animation delays */
+.stagger-1  { animation-delay: 0.05s; }
+.stagger-2  { animation-delay: 0.10s; }
+.stagger-3  { animation-delay: 0.15s; }
+.stagger-4  { animation-delay: 0.20s; }
+.stagger-5  { animation-delay: 0.25s; }
+.stagger-6  { animation-delay: 0.30s; }
+.stagger-7  { animation-delay: 0.35s; }
+.stagger-8  { animation-delay: 0.40s; }
+.stagger-9  { animation-delay: 0.45s; }
+.stagger-10 { animation-delay: 0.50s; }
