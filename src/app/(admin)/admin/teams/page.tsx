@@ -76,10 +76,14 @@ export default function AdminTeamsPage() {
   }
 
   const handleRoleChange = async (id: string, role: string) => {
-    await adminFetch(`/api/admin/teams/${id}`, {
+    const res = await adminFetch(`/api/admin/teams/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ role }),
     })
+    if (!res.ok) {
+      const data = await res.json()
+      alert(`Failed to update role: ${data.error ?? res.status}`)
+    }
     load()
   }
 

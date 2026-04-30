@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
       id: a.id,
       username: a.username,
       displayName: a.displayName,
+      role: a.role,
       createdAt: a.createdAt,
       project: a.project ?? null,
     })),
