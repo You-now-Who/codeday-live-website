@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: '/admin/news',      label: 'NEWS' },
   { href: '/admin/resources', label: 'RESOURCES' },
   { href: '/admin/projects',  label: 'PROJECTS' },
+  { href: '/admin/teams',     label: 'TEAMS' },
   { href: '/admin/config',    label: 'CONFIG' },
 ]
 

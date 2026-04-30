@@ -80,7 +80,7 @@ export default function ComponentTestPage() {
 
       <section>
         <h2 className="font-epilogue font-black text-2xl uppercase mb-4">Project Card</h2>
-        <ProjectCard project={{ id: 'proj1', teamName: 'Team Alpha', projectName: 'Awesome App', description: 'An app that does stuff', iframeUrl: 'https://example.com' }} />
+        <ProjectCard project={{ id: 'proj1', teamName: 'Team Alpha', projectName: 'Awesome App', description: 'An app that does stuff', iframeUrl: 'https://example.com', createdAt: new Date().toISOString() }} />
       </section>
     </div>
   )

@@ -81,14 +81,41 @@ model HelpRequest {
 // Project
 // ---------------------------------------------------------------------------
 model Project {
-  id          String   @id @default(cuid())
-  teamName    String   @db.VarChar(200)
-  projectName String   @db.VarChar(200)
-  description String?  @db.Text
-  iframeUrl   String   @db.VarChar(2048)
-  createdAt   DateTime @default(now())
+  id            String       @id @default(cuid())
+  teamName      String       @db.VarChar(200)
+  projectName   String       @db.VarChar(200)
+  description   String?      @db.Text
+  iframeUrl     String       @db.VarChar(2048)
+  createdAt     DateTime     @default(now())
+  teamAccountId String?      @unique
+  teamAccount   TeamAccount? @relation(fields: [teamAccountId], references: [id], onDelete: SetNull)
 
   @@unique([teamName])
+}
+
+// ---------------------------------------------------------------------------
+// TeamAccount  (one per participating team — created by organisers)
+// ---------------------------------------------------------------------------
+model TeamAccount {
+  id           String        @id @default(cuid())
+  username     String        @unique @db.VarChar(50)
+  passwordHash String
+  displayName  String?       @db.VarChar(100)
+  createdAt    DateTime      @default(now())
+  sessions     TeamSession[]
+  project      Project?
+}
+
+// ---------------------------------------------------------------------------
+// TeamSession  (httpOnly cookie token)
+// ---------------------------------------------------------------------------
+model TeamSession {
+  id        String      @id @default(cuid())
+  token     String      @unique @db.VarChar(64)
+  accountId String
+  account   TeamAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime    @default(now())
 }
 
 // ---------------------------------------------------------------------------

@@ -69,7 +69,7 @@ const NAV_LINKS = [
   { href: '/resources', label: 'RESOURCES', Icon: ResourcesIcon },
   { href: '/news',      label: 'NEWS',      Icon: NewsIcon },
   { href: '/projects',  label: 'PROJECTS',  Icon: ProjectsIcon },
-  { href: '/submit',    label: 'SUBMIT',    Icon: SubmitIcon },
+  { href: '/submit',    label: 'MY PROJECT', Icon: SubmitIcon },
   { href: '/help',      label: 'HELP',      Icon: HelpIcon },
 ]
 
