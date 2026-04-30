@@ -35,7 +35,7 @@ function NewsIcon() {
     </svg>
   )
 }
-function ProjectsIcon() {
+function WallIcon() {
   return (
     <svg viewBox="0 0 20 20" className="w-4 h-4 flex-shrink-0" fill="currentColor">
       <rect x="2" y="2" width="7" height="7" />
@@ -54,23 +54,23 @@ function HelpIcon() {
     </svg>
   )
 }
-function SubmitIcon() {
+function LoginIcon() {
   return (
     <svg viewBox="0 0 20 20" className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M10 3v10M6 9l4-6 4 6" />
-      <path d="M4 15h12v2H4z" fill="currentColor" stroke="none" />
+      <circle cx="10" cy="7" r="3" />
+      <path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6" />
     </svg>
   )
 }
 
 const NAV_LINKS = [
   { href: '/',           label: 'HOME',      Icon: HomeIcon },
-  { href: '/schedule',  label: 'SCHEDULE',  Icon: ScheduleIcon },
-  { href: '/resources', label: 'RESOURCES', Icon: ResourcesIcon },
-  { href: '/news',      label: 'NEWS',      Icon: NewsIcon },
-  { href: '/projects',  label: 'PROJECTS',  Icon: ProjectsIcon },
-  { href: '/submit',    label: 'MY PROJECT', Icon: SubmitIcon },
-  { href: '/help',      label: 'HELP',      Icon: HelpIcon },
+  { href: '/schedule',   label: 'SCHEDULE',  Icon: ScheduleIcon },
+  { href: '/resources',  label: 'RESOURCES', Icon: ResourcesIcon },
+  { href: '/news',       label: 'NEWS',      Icon: NewsIcon },
+  { href: '/wall',       label: 'WALL',      Icon: WallIcon },
+  { href: '/help',       label: 'HELP',      Icon: HelpIcon },
+  { href: '/login',      label: 'LOGIN',     Icon: LoginIcon },
 ]
 
 export function PublicNav() {
@@ -78,17 +78,14 @@ export function PublicNav() {
 
   return (
     <nav className="sticky top-0 z-40 bg-white border-b-2 border-primary flex items-stretch">
-      {/* Logo badge */}
       <div className="flex-shrink-0 flex items-center border-r-2 border-primary px-3">
         <span className="font-epilogue font-black text-xs uppercase tracking-widest bg-secondary-fixed text-on-secondary-fixed px-2 py-1 inline-block">
           CODEDAY
         </span>
       </div>
-
-      {/* Nav links — scrollable on small screens */}
       <div className="flex overflow-x-auto flex-1 scrollbar-none">
         {NAV_LINKS.map(({ href, label, Icon }) => {
-          const isActive = pathname === href
+          const isActive = pathname === href || (href === '/wall' && pathname === '/projects')
           return (
             <Link
               key={href}

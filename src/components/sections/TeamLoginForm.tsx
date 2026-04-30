@@ -27,7 +27,7 @@ export function TeamLoginForm() {
         setError(data.error ?? 'Login failed')
         return
       }
-      router.refresh()
+      router.push('/wall')
     } catch {
       setError('Network error — please try again')
     } finally {

@@ -37,7 +37,7 @@ function domain(url: string) {
   try { return new URL(url).hostname.replace(/^www\./, '') } catch { return url }
 }
 
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({ project, isOwn = false }: { project: Project; isOwn?: boolean }) {
   const h = hashStr(project.id)
   const rotation = ROTATIONS[h % ROTATIONS.length]
   const accent = ACCENT_CLASSES[h % ACCENT_CLASSES.length]
@@ -45,9 +45,14 @@ export function ProjectCard({ project }: { project: Project }) {
   const badgeBg = h % 2 === 0 ? 'bg-secondary-fixed text-on-secondary-fixed' : 'bg-primary text-on-primary'
 
   return (
-    <article className={`border-2 border-primary bg-white shadow-hard flex flex-col ${rotation} ${accent}`}>
+    <article className={`border-2 bg-white shadow-hard flex flex-col ${rotation} ${accent} ${isOwn ? 'border-secondary-fixed ring-2 ring-secondary-fixed' : 'border-primary'}`}>
 
       {/* Header — team identity */}
+      {isOwn && (
+        <div className="bg-secondary-fixed px-4 py-1">
+          <span className="font-grotesk text-xs uppercase tracking-widest text-on-secondary-fixed">Your project</span>
+        </div>
+      )}
       <div className="flex items-center gap-3 px-4 pt-4 pb-3 border-b border-primary/10">
         <span className={`w-9 h-9 flex items-center justify-center font-epilogue font-black text-sm flex-shrink-0 ${badgeBg}`}>
           {init}
