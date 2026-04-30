@@ -20,6 +20,7 @@ type FormState = {
   contactEmail: string
   contactPhone: string
   sponsors: Sponsor[]
+  submitCode: string
   error: string
   success: boolean
   loading: boolean
@@ -37,6 +38,7 @@ const emptyForm: FormState = {
   contactEmail: '',
   contactPhone: '',
   sponsors: [],
+  submitCode: '',
   error: '',
   success: false,
   loading: false,
@@ -78,6 +80,7 @@ export default function AdminConfigPage() {
           tier:    s.tier    ?? '',
           logoUrl: s.logoUrl ?? '',
         })),
+        submitCode:         config.submitCode ?? '',
       }))
     })
   }, [])
@@ -99,6 +102,7 @@ export default function AdminConfigPage() {
         contactEmail:       form.contactEmail || null,
         contactPhone:       form.contactPhone || null,
         sponsors:           form.sponsors.filter(s => s.name.trim()).map(s => ({ ...s, logoUrl: s.logoUrl || undefined })),
+        submitCode:         form.submitCode || null,
       }),
     })
     if (!res.ok) {
@@ -130,6 +134,10 @@ export default function AdminConfigPage() {
         <SectionLabel>Event</SectionLabel>
         <Input label="Event Name" value={form.eventName} onChange={e => setForm(f => ({ ...f, eventName: e.target.value }))} required />
         <Input label="Submission Deadline" type="datetime-local" value={form.submissionDeadline} onChange={e => setForm(f => ({ ...f, submissionDeadline: e.target.value }))} required />
+        <div>
+          <Input label="Submit Code (optional)" value={form.submitCode} onChange={e => setForm(f => ({ ...f, submitCode: e.target.value }))} placeholder="Leave blank to allow open submission" />
+          <p className="font-grotesk text-xs text-outline mt-1">If set, participants must enter this code to submit. Case-insensitive.</p>
+        </div>
 
         <SectionLabel>Network & Community</SectionLabel>
         <Input label="WiFi SSID" value={form.wifiSsid} onChange={e => setForm(f => ({ ...f, wifiSsid: e.target.value }))} />

@@ -56,7 +56,7 @@ export async function PATCH(request: NextRequest) {
   const body = await request.json()
   const {
     eventName, submissionDeadline, wifiSsid, wifiPassword, discordUrl, importantLinks,
-    location, locationUrl, contactEmail, contactPhone, sponsors,
+    location, locationUrl, contactEmail, contactPhone, sponsors, submitCode,
   } = body
   const data: Record<string, unknown> = {}
 
@@ -82,6 +82,7 @@ export async function PATCH(request: NextRequest) {
   if (locationUrl !== undefined)  data.locationUrl  = locationUrl?.trim()  ?? null
   if (contactEmail !== undefined) data.contactEmail = contactEmail?.trim() ?? null
   if (contactPhone !== undefined) data.contactPhone = contactPhone?.trim() ?? null
+  if (submitCode  !== undefined) data.submitCode  = submitCode?.trim()  ?? null
 
   if (importantLinks !== undefined) {
     const error = validateImportantLinks(importantLinks)

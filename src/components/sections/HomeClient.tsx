@@ -86,7 +86,7 @@ export function HomeClient({ initialConfig, initialSchedule }: HomeClientProps) 
         {/* — Submit CTA — */}
         <ScrollReveal delay={40}>
           <Link
-            href="/projects"
+            href="/submit"
             className="block relative overflow-hidden border-2 border-primary bg-primary text-on-primary p-7 shadow-hard-lg rotate-[-0.5deg] group"
           >
             <span className="absolute top-3 right-5 font-epilogue font-black text-5xl opacity-10 group-hover:opacity-20 transition-opacity select-none" aria-hidden>✦</span>

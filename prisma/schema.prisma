@@ -107,5 +107,6 @@ model EventConfig {
   contactEmail       String?  @db.VarChar(200)
   contactPhone       String?  @db.VarChar(50)
   sponsors           Json     @default("[]")
+  submitCode         String?  @db.VarChar(50)
   updatedAt          DateTime @updatedAt
 }

@@ -54,6 +54,14 @@ function HelpIcon() {
     </svg>
   )
 }
+function SubmitIcon() {
+  return (
+    <svg viewBox="0 0 20 20" className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M10 3v10M6 9l4-6 4 6" />
+      <path d="M4 15h12v2H4z" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
 
 const NAV_LINKS = [
   { href: '/',           label: 'HOME',      Icon: HomeIcon },
@@ -61,6 +69,7 @@ const NAV_LINKS = [
   { href: '/resources', label: 'RESOURCES', Icon: ResourcesIcon },
   { href: '/news',      label: 'NEWS',      Icon: NewsIcon },
   { href: '/projects',  label: 'PROJECTS',  Icon: ProjectsIcon },
+  { href: '/submit',    label: 'SUBMIT',    Icon: SubmitIcon },
   { href: '/help',      label: 'HELP',      Icon: HelpIcon },
 ]
 
