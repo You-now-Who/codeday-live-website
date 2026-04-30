@@ -7,6 +7,7 @@ import { HeroSection } from './HeroSection'
 import { HappeningNowSection } from './HappeningNowSection'
 import { CompactScheduleSection } from './CompactScheduleSection'
 import { SponsorsSection } from './SponsorsSection'
+import { Footer } from './Footer'
 import { LocationSection } from './LocationSection'
 import { ContactSection } from './ContactSection'
 import { QuickLinksSection } from './QuickLinksSection'
@@ -144,7 +145,11 @@ export function HomeClient({ initialConfig, initialSchedule }: HomeClientProps) 
         <SponsorsSection sponsors={activeConfig.sponsors ?? []} />
       </ScrollReveal>
 
-      <div className="h-10" />
+      <Footer
+        contactEmail={activeConfig.contactEmail}
+        contactPhone={activeConfig.contactPhone}
+        discordUrl={activeConfig.discordUrl}
+      />
     </div>
   )
 }

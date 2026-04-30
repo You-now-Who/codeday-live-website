@@ -7,48 +7,49 @@ interface SponsorsSectionProps {
 export function SponsorsSection({ sponsors }: SponsorsSectionProps) {
   if (sponsors.length === 0) return null
 
-  const main    = sponsors.filter(s => (s.tier ?? '').toLowerCase() !== 'thanks')
-  const thanks  = sponsors.filter(s => (s.tier ?? '').toLowerCase() === 'thanks')
+  const main   = sponsors.filter(s => (s.tier ?? '').toLowerCase() !== 'thanks')
+  const thanks = sponsors.filter(s => (s.tier ?? '').toLowerCase() === 'thanks')
 
   return (
-    /* break out of the parent px-6 so this can go edge-to-edge */
-    <section className="bg-primary text-on-primary -mx-6 px-8 py-10">
-      <p className="font-grotesk text-xs uppercase tracking-widest opacity-50 mb-8">
-        Presented by
-      </p>
-
-      <div className="flex flex-wrap gap-8 items-center mb-8">
-        {main.map((s, i) => {
-          const inner = (
-            <div key={i} className="flex items-center gap-3 group">
-              {s.logoUrl ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={s.logoUrl}
-                  alt={s.name}
-                  className="h-10 max-w-[140px] object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity"
-                />
-              ) : (
-                <span className="font-epilogue font-black text-2xl uppercase tracking-tight leading-none opacity-90 group-hover:opacity-100 transition-opacity">
-                  {s.name}
-                </span>
-              )}
-            </div>
-          )
-
-          return s.url ? (
-            <a key={i} href={s.url} target="_blank" rel="noopener noreferrer">
-              {inner}
-            </a>
-          ) : inner
-        })}
-      </div>
-
-      {thanks.length > 0 && (
-        <p className="font-grotesk text-xs uppercase tracking-widest opacity-40">
-          Special thanks &nbsp;·&nbsp; {thanks.map(s => s.name).join(' · ')}
+    <section className="bg-primary text-on-primary py-14">
+      <div className="max-w-3xl mx-auto px-6">
+        <p className="font-grotesk text-xs uppercase tracking-widest opacity-50 mb-10 text-center">
+          Presented by
         </p>
-      )}
+
+        <div className="flex flex-wrap gap-12 items-center justify-center mb-10">
+          {main.map((s, i) => {
+            const inner = (
+              <div key={i} className="flex items-center group">
+                {s.logoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={s.logoUrl}
+                    alt={s.name}
+                    className="h-14 max-w-[180px] object-contain brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity"
+                  />
+                ) : (
+                  <span className="font-epilogue font-black text-3xl uppercase tracking-tight leading-none opacity-80 group-hover:opacity-100 transition-opacity">
+                    {s.name}
+                  </span>
+                )}
+              </div>
+            )
+
+            return s.url ? (
+              <a key={i} href={s.url} target="_blank" rel="noopener noreferrer">
+                {inner}
+              </a>
+            ) : inner
+          })}
+        </div>
+
+        {thanks.length > 0 && (
+          <p className="font-grotesk text-xs uppercase tracking-widest opacity-40 text-center">
+            Special thanks &nbsp;·&nbsp; {thanks.map(s => s.name).join(' · ')}
+          </p>
+        )}
+      </div>
     </section>
   )
 }
