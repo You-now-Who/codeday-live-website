@@ -4,7 +4,6 @@ import { useCallback, useState } from 'react'
 import { usePolling } from '@/lib/hooks/usePolling'
 import { PostCard, PostData } from '@/components/ui/PostCard'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
-import { MentorSection } from './MentorSection'
 import Link from 'next/link'
 
 type Account = { id: string; username: string; displayName: string | null; role: string }
@@ -127,9 +126,6 @@ export function WallClient({ account, initialPosts }: WallClientProps) {
 
   return (
     <div>
-      {/* Mentor queue — visible to MENTOR and ADMIN */}
-      {isModerator && <MentorSection />}
-
       {/* Header */}
       <div className="border-b-2 border-primary px-6 py-5">
         <div className="max-w-2xl mx-auto flex items-end justify-between gap-4">
