@@ -104,6 +104,57 @@ model TeamAccount {
   createdAt    DateTime      @default(now())
   sessions     TeamSession[]
   project      Project?
+  posts        Post[]
+  comments     Comment[]
+  reactions    Reaction[]
+}
+
+// ---------------------------------------------------------------------------
+// Post  (social wall post)
+// ---------------------------------------------------------------------------
+model Post {
+  id            String      @id @default(cuid())
+  content       String      @db.Text
+  imageUrl      String?     @db.VarChar(2048)
+  teamAccountId String
+  teamAccount   TeamAccount @relation(fields: [teamAccountId], references: [id], onDelete: Cascade)
+  comments      Comment[]
+  reactions     Reaction[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Comment
+// ---------------------------------------------------------------------------
+model Comment {
+  id            String      @id @default(cuid())
+  body          String      @db.Text
+  postId        String
+  post          Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
+  teamAccountId String
+  teamAccount   TeamAccount @relation(fields: [teamAccountId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@index([postId, createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Reaction  (emoji toggle — one of each emoji per account per post)
+// ---------------------------------------------------------------------------
+model Reaction {
+  id            String      @id @default(cuid())
+  emoji         String      @db.VarChar(10)
+  postId        String
+  post          Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
+  teamAccountId String
+  teamAccount   TeamAccount @relation(fields: [teamAccountId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@unique([postId, teamAccountId, emoji])
+  @@index([postId])
 }
 
 // ---------------------------------------------------------------------------

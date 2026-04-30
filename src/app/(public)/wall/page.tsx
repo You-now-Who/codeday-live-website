@@ -1,31 +1,43 @@
-import { cookies } from 'next/headers'
-import { getAccountFromToken, TEAM_SESSION_COOKIE } from '@/lib/teamAuth'
+import { getSessionAccount } from '@/lib/serverAuth'
 import { prisma } from '@/lib/prisma'
 import { WallClient } from '@/components/sections/WallClient'
+import type { PostData } from '@/components/ui/PostCard'
 
 export default async function WallPage() {
-  const jar = await cookies()
-  const token = jar.get(TEAM_SESSION_COOKIE)?.value
-  const account = token ? await getAccountFromToken(token) : null
+  const account = await getSessionAccount()
 
-  const [rawProjects, config, userProject] = await Promise.all([
-    prisma.project.findMany({ orderBy: { createdAt: 'desc' } }),
-    prisma.eventConfig.findUnique({ where: { id: '1' } }),
-    account
-      ? prisma.project.findUnique({ where: { teamAccountId: account.id } })
-      : Promise.resolve(null),
-  ])
+  const raw = await prisma.post.findMany({
+    orderBy: { createdAt: 'desc' },
+    include: {
+      teamAccount: { select: { id: true, username: true, displayName: true } },
+      _count: { select: { comments: true } },
+      reactions: { select: { emoji: true, teamAccountId: true } },
+    },
+  })
 
-  const deadlinePassed = config?.submissionDeadline
-    ? new Date() > config.submissionDeadline
-    : false
+  const initialPosts: PostData[] = raw.map(p => {
+    const reactionCounts: Record<string, number> = {}
+    const myReactions: string[] = []
+    for (const r of p.reactions) {
+      reactionCounts[r.emoji] = (reactionCounts[r.emoji] ?? 0) + 1
+      if (account && r.teamAccountId === account.id) myReactions.push(r.emoji)
+    }
+    return {
+      id: p.id,
+      content: p.content,
+      imageUrl: p.imageUrl,
+      createdAt: p.createdAt.toISOString(),
+      author: p.teamAccount,
+      commentCount: p._count.comments,
+      reactionCounts,
+      myReactions,
+    }
+  })
 
   return (
     <WallClient
       account={account ? { id: account.id, username: account.username, displayName: account.displayName } : null}
-      userProject={userProject ? JSON.parse(JSON.stringify(userProject)) : null}
-      initialProjects={JSON.parse(JSON.stringify(rawProjects))}
-      deadlinePassed={deadlinePassed}
+      initialPosts={initialPosts}
     />
   )
 }

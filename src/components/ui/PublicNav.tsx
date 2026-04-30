@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 function HomeIcon() {
   return (
@@ -54,7 +55,7 @@ function HelpIcon() {
     </svg>
   )
 }
-function LoginIcon() {
+function PersonIcon() {
   return (
     <svg viewBox="0 0 20 20" className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
       <circle cx="10" cy="7" r="3" />
@@ -64,28 +65,43 @@ function LoginIcon() {
 }
 
 const NAV_LINKS = [
-  { href: '/',           label: 'HOME',      Icon: HomeIcon },
-  { href: '/schedule',   label: 'SCHEDULE',  Icon: ScheduleIcon },
-  { href: '/resources',  label: 'RESOURCES', Icon: ResourcesIcon },
-  { href: '/news',       label: 'NEWS',      Icon: NewsIcon },
-  { href: '/wall',       label: 'WALL',      Icon: WallIcon },
-  { href: '/help',       label: 'HELP',      Icon: HelpIcon },
-  { href: '/login',      label: 'LOGIN',     Icon: LoginIcon },
+  { href: '/',          label: 'HOME',      Icon: HomeIcon },
+  { href: '/schedule',  label: 'SCHEDULE',  Icon: ScheduleIcon },
+  { href: '/resources', label: 'RESOURCES', Icon: ResourcesIcon },
+  { href: '/news',      label: 'NEWS',      Icon: NewsIcon },
+  { href: '/wall',      label: 'WALL',      Icon: WallIcon },
+  { href: '/help',      label: 'HELP',      Icon: HelpIcon },
 ]
+
+type Me = { username: string; displayName: string | null } | null
 
 export function PublicNav() {
   const pathname = usePathname()
+  const [me, setMe] = useState<Me | undefined>(undefined)
+
+  useEffect(() => {
+    fetch('/api/teams/me')
+      .then(r => r.json())
+      .then(d => setMe(d.account ?? null))
+      .catch(() => setMe(null))
+  }, [pathname])
+
+  const label = me ? (me.displayName ?? me.username).slice(0, 12) : 'LOGIN'
+  const isProfileActive = pathname === '/profile' || pathname === '/login'
 
   return (
     <nav className="sticky top-0 z-40 bg-white border-b-2 border-primary flex items-stretch">
+      {/* Logo */}
       <div className="flex-shrink-0 flex items-center border-r-2 border-primary px-3">
         <span className="font-epilogue font-black text-xs uppercase tracking-widest bg-secondary-fixed text-on-secondary-fixed px-2 py-1 inline-block">
           CODEDAY
         </span>
       </div>
+
+      {/* Nav links — scrollable */}
       <div className="flex overflow-x-auto flex-1 scrollbar-none">
-        {NAV_LINKS.map(({ href, label, Icon }) => {
-          const isActive = pathname === href || (href === '/wall' && pathname === '/projects')
+        {NAV_LINKS.map(({ href, label: navLabel, Icon }) => {
+          const isActive = pathname === href
           return (
             <Link
               key={href}
@@ -97,11 +113,26 @@ export function PublicNav() {
               }`}
             >
               <Icon />
-              <span className="hidden sm:inline">{label}</span>
+              <span className="hidden sm:inline">{navLabel}</span>
             </Link>
           )
         })}
       </div>
+
+      {/* Login / Profile — pinned right */}
+      <Link
+        href={me ? '/profile' : '/login'}
+        className={`flex-shrink-0 flex items-center gap-1.5 px-4 border-l-2 border-primary font-epilogue font-bold text-xs uppercase tracking-tight transition-colors ${
+          isProfileActive
+            ? 'bg-secondary-fixed text-on-secondary-fixed'
+            : 'hover:bg-surface text-primary'
+        }`}
+      >
+        <PersonIcon />
+        {me !== undefined && (
+          <span className="hidden sm:inline truncate max-w-[80px]">{label}</span>
+        )}
+      </Link>
     </nav>
   )
 }
