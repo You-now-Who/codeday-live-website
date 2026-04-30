@@ -55,6 +55,15 @@ function HelpIcon() {
     </svg>
   )
 }
+function MentorIcon() {
+  return (
+    <svg viewBox="0 0 20 20" className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="7" cy="6" r="3" />
+      <path d="M1 17c0-3 2.7-5 6-5s6 2 6 5" />
+      <path d="M14 9l1.5 1.5L18 8" />
+    </svg>
+  )
+}
 function PersonIcon() {
   return (
     <svg viewBox="0 0 20 20" className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
@@ -71,6 +80,7 @@ const NAV_LINKS = [
   { href: '/news',      label: 'NEWS',      Icon: NewsIcon },
   { href: '/wall',      label: 'WALL',      Icon: WallIcon },
   { href: '/help',      label: 'HELP',      Icon: HelpIcon },
+  { href: '/mentor',    label: 'MENTOR',    Icon: MentorIcon },
 ]
 
 type Me = { username: string; displayName: string | null } | null

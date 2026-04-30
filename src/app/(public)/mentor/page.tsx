@@ -34,9 +34,6 @@ function apiFetch(url: string, options: RequestInit = {}) {
 export default function MentorPage() {
   const [requests, setRequests] = useState<HelpRequest[]>([])
   const [loading, setLoading] = useState(true)
-  const [myName, setMyName] = useState('')
-  const [nameInput, setNameInput] = useState('')
-  const [nameSet, setNameSet] = useState(false)
 
   const load = useCallback(() => {
     apiFetch('/api/mentor/help')
@@ -46,16 +43,15 @@ export default function MentorPage() {
   }, [])
 
   useEffect(() => {
-    if (!nameSet) return
     load()
     const t = setInterval(load, 20_000)
     return () => clearInterval(t)
-  }, [load, nameSet])
+  }, [load])
 
   const update = async (id: string, status: string) => {
     await apiFetch(`/api/mentor/help/${id}`, {
       method: 'PATCH',
-      body: JSON.stringify({ status, claimedBy: status === 'IN_PROGRESS' ? myName : undefined }),
+      body: JSON.stringify({ status }),
     })
     load()
   }
@@ -63,41 +59,14 @@ export default function MentorPage() {
   const pending = requests.filter(r => r.status === 'PENDING')
   const inProgress = requests.filter(r => r.status === 'IN_PROGRESS')
 
-  if (!nameSet) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="w-full max-w-sm bg-white border-2 border-primary shadow-hard p-8">
-          <h1 className="font-epilogue font-black text-2xl uppercase tracking-tight mb-1">Mentor Queue</h1>
-          <p className="font-grotesk text-sm text-outline mb-6">Enter your name so teams know who&apos;s helping them.</p>
-          <form onSubmit={e => { e.preventDefault(); if (nameInput.trim()) { setMyName(nameInput.trim()); setNameSet(true) } }}>
-            <input
-              value={nameInput}
-              onChange={e => setNameInput(e.target.value)}
-              placeholder="Your name"
-              className="w-full border-2 border-primary px-3 py-2 font-grotesk text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 mb-4"
-              autoFocus
-            />
-            <button
-              type="submit"
-              disabled={!nameInput.trim()}
-              className="w-full font-epilogue font-black text-sm uppercase border-2 border-primary bg-primary text-on-primary py-2 hover:bg-secondary-fixed hover:border-secondary-fixed hover:text-on-secondary-fixed transition-colors disabled:opacity-40"
-            >
-              Enter Queue →
-            </button>
-          </form>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="max-w-2xl mx-auto px-6 py-8">
       <div className="flex items-end justify-between mb-6">
         <div>
           <h1 className="font-epilogue font-black text-3xl uppercase tracking-tight leading-none">Help Queue</h1>
-          <p className="font-grotesk text-sm text-outline mt-1">Mentoring as <strong>{myName}</strong></p>
+          <p className="font-grotesk text-sm text-outline mt-1">Refreshes every 20 seconds</p>
         </div>
-        <div className="flex gap-4 font-grotesk text-sm">
+        <div className="flex gap-3">
           {pending.length > 0 && (
             <span className="border-2 border-primary px-3 py-1 font-epilogue font-black text-xs uppercase">
               {pending.length} pending
@@ -125,7 +94,7 @@ export default function MentorPage() {
         {requests.map(r => (
           <div
             key={r.id}
-            className={`bg-white border-2 border-primary shadow-hard p-4 ${r.status === 'IN_PROGRESS' ? 'border-secondary-fixed' : ''}`}
+            className={`bg-white border-2 shadow-hard p-4 ${r.status === 'IN_PROGRESS' ? 'border-secondary-fixed' : 'border-primary'}`}
           >
             <div className="flex items-center justify-between gap-4">
               <div>
