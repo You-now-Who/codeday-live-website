@@ -91,8 +91,8 @@ export function HomeClient({ initialConfig, initialSchedule }: HomeClientProps) 
             className="block relative overflow-hidden border-2 border-primary bg-primary text-on-primary p-7 shadow-hard-lg rotate-[-0.5deg] group"
           >
             <span className="absolute top-3 right-5 font-epilogue font-black text-5xl opacity-10 group-hover:opacity-20 transition-opacity select-none" aria-hidden>✦</span>
-            <p className="font-grotesk text-xs uppercase tracking-widest opacity-70 mb-1">Ready to show the world?</p>
-            <p className="font-epilogue font-black text-3xl uppercase tracking-tight leading-tight">Submit your project →</p>
+            <p className="font-grotesk text-xs uppercase tracking-widest opacity-70 mb-1">Wanna see whats going on?</p>
+            <p className="font-epilogue font-black text-3xl uppercase tracking-tight leading-tight">Post on the wall→</p>
           </Link>
         </ScrollReveal>
 
