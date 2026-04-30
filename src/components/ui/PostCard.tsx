@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { EmojiPicker } from './EmojiPicker'
 
 export type PostData = {
   id: string
@@ -17,10 +18,9 @@ type Comment = {
   id: string
   body: string
   createdAt: string
+  authorId: string
   author: { username: string; displayName: string | null }
 }
-
-const EMOJIS = ['❤️', '🔥', '👏', '🚀']
 
 function timeAgo(iso: string) {
   const diff = Date.now() - new Date(iso).getTime()
@@ -43,15 +43,16 @@ function hashStr(s: string) {
 interface PostCardProps {
   post: PostData
   accountId: string | null
-  isOwn: boolean
+  canDelete: boolean
   onDelete?: (id: string) => void
 }
 
-export function PostCard({ post, accountId, isOwn, onDelete }: PostCardProps) {
+export function PostCard({ post, accountId, canDelete, onDelete }: PostCardProps) {
   const [reactions, setReactions] = useState({
     counts: post.reactionCounts,
     mine: new Set(post.myReactions),
   })
+  const [showPicker, setShowPicker] = useState(false)
   const [showComments, setShowComments] = useState(false)
   const [comments, setComments] = useState<Comment[] | null>(null)
   const [commentBody, setCommentBody] = useState('')
@@ -66,17 +67,17 @@ export function PostCard({ post, accountId, isOwn, onDelete }: PostCardProps) {
     if (!accountId) return
     const had = reactions.mine.has(emoji)
     setReactions(prev => {
-      const newCounts = { ...prev.counts }
-      const newMine = new Set(prev.mine)
+      const counts = { ...prev.counts }
+      const mine = new Set(prev.mine)
       if (had) {
-        newCounts[emoji] = Math.max(0, (newCounts[emoji] ?? 1) - 1)
-        if (newCounts[emoji] === 0) delete newCounts[emoji]
-        newMine.delete(emoji)
+        counts[emoji] = Math.max(0, (counts[emoji] ?? 1) - 1)
+        if (counts[emoji] === 0) delete counts[emoji]
+        mine.delete(emoji)
       } else {
-        newCounts[emoji] = (newCounts[emoji] ?? 0) + 1
-        newMine.add(emoji)
+        counts[emoji] = (counts[emoji] ?? 0) + 1
+        mine.add(emoji)
       }
-      return { counts: newCounts, mine: newMine }
+      return { counts, mine }
     })
     await fetch(`/api/posts/${post.id}/reactions`, {
       method: 'POST',
@@ -111,15 +112,28 @@ export function PostCard({ post, accountId, isOwn, onDelete }: PostCardProps) {
     setCommentLoading(false)
   }
 
+  const deleteComment = async (commentId: string) => {
+    if (!confirm('Delete this comment?')) return
+    const res = await fetch(`/api/posts/${post.id}/comments/${commentId}`, { method: 'DELETE' })
+    if (res.ok) {
+      setComments(c => (c ?? []).filter(x => x.id !== commentId))
+      setCommentCount(n => Math.max(0, n - 1))
+    }
+  }
+
   const handleDelete = async () => {
     if (!confirm('Delete this post?')) return
     await fetch(`/api/posts/${post.id}`, { method: 'DELETE' })
     onDelete?.(post.id)
   }
 
+  // Sorted: emojis with counts, highest first
+  const activeEmojis = Object.entries(reactions.counts)
+    .filter(([, c]) => c > 0)
+    .sort((a, b) => b[1] - a[1])
+
   return (
     <article className="bg-white border-2 border-primary shadow-hard">
-
       {/* Header */}
       <div className="flex items-center gap-3 px-4 pt-4 pb-3">
         <span className={`w-9 h-9 flex-shrink-0 flex items-center justify-center font-epilogue font-black text-xs ${badgeBg}`}>
@@ -129,8 +143,8 @@ export function PostCard({ post, accountId, isOwn, onDelete }: PostCardProps) {
           <p className="font-epilogue font-black text-sm uppercase tracking-tight leading-none">{displayName}</p>
           <p className="font-grotesk text-xs text-outline mt-0.5">@{post.author.username} · {timeAgo(post.createdAt)}</p>
         </div>
-        {isOwn && (
-          <button onClick={handleDelete} className="font-grotesk text-xs text-outline hover:text-error transition-colors flex-shrink-0" aria-label="Delete post">✕</button>
+        {canDelete && (
+          <button onClick={handleDelete} className="font-grotesk text-xs text-outline hover:text-error transition-colors flex-shrink-0 px-1" aria-label="Delete post">✕</button>
         )}
       </div>
 
@@ -147,27 +161,39 @@ export function PostCard({ post, accountId, isOwn, onDelete }: PostCardProps) {
         </div>
       )}
 
-      {/* Reactions + comment toggle */}
-      <div className="px-4 pb-3 flex items-center gap-1 flex-wrap border-t border-primary/10 pt-3">
-        {EMOJIS.map(emoji => {
-          const count = reactions.counts[emoji] ?? 0
-          const reacted = reactions.mine.has(emoji)
-          return (
+      {/* Reactions row */}
+      <div className="px-4 pb-3 flex items-center gap-1 flex-wrap border-t border-primary/10 pt-3 relative">
+        {activeEmojis.map(([emoji, count]) => (
+          <button
+            key={emoji}
+            onClick={() => toggleReaction(emoji)}
+            disabled={!accountId}
+            className={`flex items-center gap-1 px-2 py-1 font-grotesk text-xs border transition-colors ${
+              reactions.mine.has(emoji)
+                ? 'border-primary bg-secondary-fixed text-on-secondary-fixed'
+                : 'border-primary/20 hover:border-primary hover:bg-surface'
+            } ${!accountId ? 'cursor-default' : ''}`}
+          >
+            <span>{emoji}</span>
+            <span className="font-bold">{count}</span>
+          </button>
+        ))}
+
+        {accountId && (
+          <div className="relative">
             <button
-              key={emoji}
-              onClick={() => toggleReaction(emoji)}
-              disabled={!accountId}
-              className={`flex items-center gap-1 px-2 py-1 font-grotesk text-xs border transition-colors ${
-                reacted
-                  ? 'border-primary bg-secondary-fixed text-on-secondary-fixed'
-                  : 'border-primary/20 hover:border-primary hover:bg-surface'
-              } ${!accountId ? 'cursor-default opacity-60' : ''}`}
+              onClick={() => setShowPicker(s => !s)}
+              className="flex items-center px-2 py-1 font-grotesk text-xs border border-dashed border-primary/40 hover:border-primary transition-colors text-outline hover:text-primary"
+              aria-label="Add reaction"
             >
-              <span>{emoji}</span>
-              {count > 0 && <span className="font-bold">{count}</span>}
+              + React
             </button>
-          )
-        })}
+            {showPicker && (
+              <EmojiPicker onSelect={toggleReaction} onClose={() => setShowPicker(false)} />
+            )}
+          </div>
+        )}
+
         <button
           onClick={loadComments}
           className="ml-auto font-grotesk text-xs text-outline hover:text-primary transition-colors"
@@ -176,7 +202,7 @@ export function PostCard({ post, accountId, isOwn, onDelete }: PostCardProps) {
         </button>
       </div>
 
-      {/* Comments section */}
+      {/* Comments */}
       {showComments && (
         <div className="border-t-2 border-primary/10 bg-surface">
           {comments === null ? (
@@ -186,20 +212,30 @@ export function PostCard({ post, accountId, isOwn, onDelete }: PostCardProps) {
               {comments.length === 0 && (
                 <p className="font-grotesk text-xs text-outline">No comments yet.</p>
               )}
-              {comments.map(c => (
-                <div key={c.id} className="flex gap-2">
-                  <span className="font-epilogue font-black text-xs flex-shrink-0 mt-0.5 opacity-60">
-                    {initials(c.author.displayName ?? c.author.username)}
-                  </span>
-                  <div>
-                    <span className="font-epilogue font-black text-xs uppercase tracking-tight">
-                      {c.author.displayName ?? c.author.username}
+              {comments.map(c => {
+                const canDeleteComment = canDelete || c.authorId === accountId
+                return (
+                  <div key={c.id} className="flex gap-2 group">
+                    <span className="font-epilogue font-black text-xs flex-shrink-0 mt-0.5 opacity-50">
+                      {initials(c.author.displayName ?? c.author.username)}
                     </span>
-                    <span className="font-grotesk text-xs text-outline ml-2">{timeAgo(c.createdAt)}</span>
-                    <p className="font-grotesk text-xs mt-0.5">{c.body}</p>
+                    <div className="flex-1 min-w-0">
+                      <span className="font-epilogue font-black text-xs uppercase tracking-tight">
+                        {c.author.displayName ?? c.author.username}
+                      </span>
+                      <span className="font-grotesk text-xs text-outline ml-2">{timeAgo(c.createdAt)}</span>
+                      <p className="font-grotesk text-xs mt-0.5 break-words">{c.body}</p>
+                    </div>
+                    {canDeleteComment && (
+                      <button
+                        onClick={() => deleteComment(c.id)}
+                        className="font-grotesk text-xs text-outline hover:text-error opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
+                        aria-label="Delete comment"
+                      >✕</button>
+                    )}
                   </div>
-                </div>
-              ))}
+                )
+              })}
 
               {accountId && (
                 <form onSubmit={submitComment} className="flex gap-2 pt-1">

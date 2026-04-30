@@ -2,8 +2,6 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAccountFromToken, TEAM_SESSION_COOKIE } from '@/lib/teamAuth'
 
-const ALLOWED = ['❤️', '🔥', '👏', '🚀']
-
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   const token = req.cookies.get(TEAM_SESSION_COOKIE)?.value
   if (!token) return Response.json({ error: 'Not logged in' }, { status: 401 })
@@ -11,7 +9,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   if (!account) return Response.json({ error: 'Session expired' }, { status: 401 })
 
   const { emoji } = await req.json()
-  if (!ALLOWED.includes(emoji)) return Response.json({ error: 'Invalid emoji' }, { status: 400 })
+  if (!emoji || typeof emoji !== 'string' || emoji.length > 10) {
+    return Response.json({ error: 'Invalid emoji' }, { status: 400 })
+  }
 
   const post = await prisma.post.findUnique({ where: { id: params.id } })
   if (!post) return Response.json({ error: 'Post not found' }, { status: 404 })

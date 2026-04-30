@@ -36,7 +36,7 @@ export default async function WallPage() {
 
   return (
     <WallClient
-      account={account ? { id: account.id, username: account.username, displayName: account.displayName } : null}
+      account={account ? { id: account.id, username: account.username, displayName: account.displayName, role: account.role } : null}
       initialPosts={initialPosts}
     />
   )

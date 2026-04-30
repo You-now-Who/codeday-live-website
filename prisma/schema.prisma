@@ -93,6 +93,12 @@ model Project {
   @@unique([teamName])
 }
 
+enum TeamRole {
+  TEAM
+  MENTOR
+  ADMIN
+}
+
 // ---------------------------------------------------------------------------
 // TeamAccount  (one per participating team — created by organisers)
 // ---------------------------------------------------------------------------
@@ -101,6 +107,7 @@ model TeamAccount {
   username     String        @unique @db.VarChar(50)
   passwordHash String
   displayName  String?       @db.VarChar(100)
+  role         TeamRole      @default(TEAM)
   createdAt    DateTime      @default(now())
   sessions     TeamSession[]
   project      Project?

@@ -6,13 +6,14 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
   const comments = await prisma.comment.findMany({
     where: { postId: params.id },
     orderBy: { createdAt: 'asc' },
-    include: { teamAccount: { select: { username: true, displayName: true } } },
+    include: { teamAccount: { select: { id: true, username: true, displayName: true } } },
   })
   return Response.json({
     comments: comments.map(c => ({
       id: c.id,
       body: c.body,
       createdAt: c.createdAt,
+      authorId: c.teamAccountId,
       author: c.teamAccount,
     })),
   })
@@ -33,10 +34,16 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
   const comment = await prisma.comment.create({
     data: { body: body.trim(), postId: params.id, teamAccountId: account.id },
-    include: { teamAccount: { select: { username: true, displayName: true } } },
+    include: { teamAccount: { select: { id: true, username: true, displayName: true } } },
   })
 
   return Response.json({
-    comment: { id: comment.id, body: comment.body, createdAt: comment.createdAt, author: comment.teamAccount },
+    comment: {
+      id: comment.id,
+      body: comment.body,
+      createdAt: comment.createdAt,
+      authorId: comment.teamAccountId,
+      author: comment.teamAccount,
+    },
   }, { status: 201 })
 }

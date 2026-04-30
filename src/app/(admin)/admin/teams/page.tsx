@@ -9,6 +9,7 @@ type Account = {
   id: string
   username: string
   displayName: string | null
+  role: 'TEAM' | 'MENTOR' | 'ADMIN'
   createdAt: string
   project: { projectName: string; iframeUrl: string } | null
 }
@@ -72,6 +73,14 @@ export default function AdminTeamsPage() {
       setResetSaved(id)
       setTimeout(() => setResetSaved(null), 3000)
     }
+  }
+
+  const handleRoleChange = async (id: string, role: string) => {
+    await adminFetch(`/api/admin/teams/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ role }),
+    })
+    load()
   }
 
   return (
@@ -166,6 +175,21 @@ export default function AdminTeamsPage() {
                   ) : (
                     <p className="font-grotesk text-xs text-outline mt-0.5">No project yet</p>
                   )}
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <select
+                    value={a.role}
+                    onChange={e => handleRoleChange(a.id, e.target.value)}
+                    className={`font-epilogue font-black text-xs uppercase border-2 px-2 py-1 focus:outline-none cursor-pointer ${
+                      a.role === 'MENTOR' ? 'border-primary bg-secondary-fixed text-on-secondary-fixed' :
+                      a.role === 'ADMIN'  ? 'border-primary bg-primary text-on-primary' :
+                      'border-primary/30 bg-white text-primary'
+                    }`}
+                  >
+                    <option value="TEAM">Team</option>
+                    <option value="MENTOR">Mentor</option>
+                    <option value="ADMIN">Admin</option>
+                  </select>
                 </div>
                 <Button
                   type="button"
