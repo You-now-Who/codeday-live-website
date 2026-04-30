@@ -10,5 +10,5 @@ export async function GET(req: NextRequest) {
   if (!account) return Response.json({ account: null })
 
   const project = await prisma.project.findUnique({ where: { teamAccountId: account.id } })
-  return Response.json({ account: { id: account.id, username: account.username, displayName: account.displayName }, project })
+  return Response.json({ account: { id: account.id, username: account.username, displayName: account.displayName, role: account.role }, project })
 }

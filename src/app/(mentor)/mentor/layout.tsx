@@ -1,6 +1,13 @@
+import { redirect } from 'next/navigation'
+import { getSessionAccount } from '@/lib/serverAuth'
 import { MentorNav } from '@/components/ui/MentorNav'
 
-export default function MentorLayout({ children }: { children: React.ReactNode }) {
+export default async function MentorLayout({ children }: { children: React.ReactNode }) {
+  const account = await getSessionAccount()
+  if (!account || (account.role !== 'MENTOR' && account.role !== 'ADMIN')) {
+    redirect('/login')
+  }
+
   return (
     <div className="min-h-screen">
       <MentorNav />

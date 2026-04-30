@@ -80,10 +80,9 @@ const NAV_LINKS = [
   { href: '/news',      label: 'NEWS',      Icon: NewsIcon },
   { href: '/wall',      label: 'WALL',      Icon: WallIcon },
   { href: '/help',      label: 'HELP',      Icon: HelpIcon },
-  { href: '/mentor',    label: 'MENTOR',    Icon: MentorIcon },
 ]
 
-type Me = { username: string; displayName: string | null } | null
+type Me = { username: string; displayName: string | null; role: string } | null
 
 export function PublicNav() {
   const pathname = usePathname()
@@ -110,7 +109,7 @@ export function PublicNav() {
 
       {/* Nav links — scrollable */}
       <div className="flex overflow-x-auto flex-1 scrollbar-none">
-        {NAV_LINKS.map(({ href, label: navLabel, Icon }) => {
+        {[...NAV_LINKS, ...(me?.role === 'MENTOR' || me?.role === 'ADMIN' ? [{ href: '/mentor', label: 'MENTOR', Icon: MentorIcon }] : [])].map(({ href, label: navLabel, Icon }) => {
           const isActive = pathname === href
           return (
             <Link

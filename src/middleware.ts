@@ -74,21 +74,9 @@ export function middleware(request: NextRequest) {
     if (response) return response
   }
 
-  if (pathname.startsWith('/mentor')) {
-    const mentorUser = process.env.MENTOR_USER
-    const mentorPass = process.env.MENTOR_PASS
-
-    if (!mentorUser || !mentorPass) {
-      return NextResponse.json({ error: 'Mentor credentials not configured' }, { status: 503 })
-    }
-
-    const response = isAuthenticated(request, mentorUser, mentorPass, 'CodeDay Mentors')
-    if (response) return response
-  }
-
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/mentor/:path*'],
+  matcher: ['/admin/:path*'],
 }
