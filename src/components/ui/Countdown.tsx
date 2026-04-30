@@ -8,12 +8,11 @@ interface CountdownProps {
 
 function getTimeLeft(target: Date) {
   const diff = target.getTime() - Date.now()
-  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0, expired: true }
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  if (diff <= 0) return { hours: 0, minutes: 0, seconds: 0, expired: true }
+  const hours = Math.floor(diff / (1000 * 60 * 60))
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
   const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-  return { days, hours, minutes, seconds, expired: false }
+  return { hours, minutes, seconds, expired: false }
 }
 
 function pad(n: number) {
@@ -39,7 +38,6 @@ export function Countdown({ targetDate }: CountdownProps) {
   }
 
   const units = [
-    { label: 'DAYS', value: timeLeft.days },
     { label: 'HRS', value: timeLeft.hours },
     { label: 'MIN', value: timeLeft.minutes },
     { label: 'SEC', value: timeLeft.seconds },
