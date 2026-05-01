@@ -128,6 +128,19 @@ export default function MentorPage() {
   )
   const { data: requests, loading, error, refresh } = usePolling<HelpRequest[]>(fetcher, 15_000)
 
+  const [clearing, setClearing] = useState(false)
+
+  const handleClearResolved = async () => {
+    if (!window.confirm('Delete all resolved requests?')) return
+    setClearing(true)
+    try {
+      await adminFetch('/api/help-requests', { method: 'DELETE' })
+      refresh()
+    } finally {
+      setClearing(false)
+    }
+  }
+
   const pending = (requests ?? []).filter(r => r.status === 'PENDING')
   const inProgress = (requests ?? []).filter(r => r.status === 'IN_PROGRESS')
   const resolved = (requests ?? []).filter(r => r.status === 'RESOLVED')
@@ -159,6 +172,15 @@ export default function MentorPage() {
             <div className="border-b-2 border-primary mb-4 pb-2 flex items-baseline gap-2">
               <h2 className="font-epilogue font-black text-lg uppercase tracking-tight">{label}</h2>
               <span className="font-grotesk text-sm text-outline">({count})</span>
+              {label === 'RESOLVED' && count > 0 && (
+                <Button
+                  className="ml-auto text-xs py-0.5 px-2 text-error"
+                  onClick={handleClearResolved}
+                  disabled={clearing}
+                >
+                  {clearing ? '...' : 'CLEAR ALL'}
+                </Button>
+              )}
             </div>
             <div className="space-y-4">
               {items.length === 0 && (

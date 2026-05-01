@@ -22,6 +22,19 @@ export async function GET(request: NextRequest) {
   }
 }
 
+export async function DELETE(request: NextRequest) {
+  if (!checkAdminKey(request)) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  try {
+    const { count } = await prisma.helpRequest.deleteMany({ where: { status: 'RESOLVED' } })
+    return Response.json({ deleted: count })
+  } catch {
+    return Response.json({ error: 'Failed to clear resolved requests' }, { status: 500 })
+  }
+}
+
 export async function POST(request: NextRequest) {
   const body = await request.json()
   const { teamName } = body
