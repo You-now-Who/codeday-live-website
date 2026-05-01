@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 const EMOJIS = [
   '😀','😂','🥹','😍','🤩','😎','🥳','😭','😤','🤔','🤯','😴','🥺','😏','🤪',
@@ -13,25 +14,48 @@ const EMOJIS = [
 ]
 
 interface EmojiPickerProps {
+  anchorRef: React.RefObject<HTMLElement | null>
   onSelect: (emoji: string) => void
   onClose: () => void
 }
 
-export function EmojiPicker({ onSelect, onClose }: EmojiPickerProps) {
-  const ref = useRef<HTMLDivElement>(null)
+export function EmojiPicker({ anchorRef, onSelect, onClose }: EmojiPickerProps) {
+  const pickerRef = useRef<HTMLDivElement>(null)
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null)
+
+  useEffect(() => {
+    if (anchorRef.current) {
+      const r = anchorRef.current.getBoundingClientRect()
+      const pickerH = 160
+      const spaceAbove = r.top
+      const openUpward = spaceAbove >= pickerH + 8
+      setPos({
+        top: openUpward ? r.top - pickerH - 4 : r.bottom + 4,
+        left: r.left,
+      })
+    }
+  }, [anchorRef])
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose()
+      if (
+        pickerRef.current && !pickerRef.current.contains(e.target as Node) &&
+        anchorRef.current && !anchorRef.current.contains(e.target as Node)
+      ) {
+        onClose()
+      }
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
-  }, [onClose])
+  }, [onClose, anchorRef])
 
-  return (
+  if (!pos) return null
+
+  return createPortal(
     <div
-      ref={ref}
-      className="absolute bottom-full mb-1 left-0 z-30 bg-white border-2 border-primary shadow-hard p-2 w-64"
+      ref={pickerRef}
+      style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 9999 }}
+      className="bg-white border-2 border-primary shadow-hard p-2 w-64"
     >
       <div className="grid grid-cols-10 gap-0.5">
         {EMOJIS.map(e => (
@@ -45,6 +69,7 @@ export function EmojiPicker({ onSelect, onClose }: EmojiPickerProps) {
           </button>
         ))}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

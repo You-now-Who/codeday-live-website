@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { EmojiPicker } from './EmojiPicker'
 
 export type PostData = {
@@ -48,6 +48,7 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, accountId, canDelete, onDelete }: PostCardProps) {
+  const reactBtnRef = useRef<HTMLButtonElement>(null)
   const [reactions, setReactions] = useState({
     counts: post.reactionCounts,
     mine: new Set(post.myReactions),
@@ -181,6 +182,7 @@ export function PostCard({ post, accountId, canDelete, onDelete }: PostCardProps
         {accountId && (
           <div className="relative">
             <button
+              ref={reactBtnRef}
               onClick={() => setShowPicker(s => !s)}
               className="flex items-center px-2 py-1 font-grotesk text-xs border border-dashed border-primary/40 hover:border-primary transition-colors text-outline hover:text-primary sketch-box"
               aria-label="Add reaction"
@@ -188,7 +190,7 @@ export function PostCard({ post, accountId, canDelete, onDelete }: PostCardProps
               + React
             </button>
             {showPicker && (
-              <EmojiPicker onSelect={toggleReaction} onClose={() => setShowPicker(false)} />
+              <EmojiPicker anchorRef={reactBtnRef} onSelect={toggleReaction} onClose={() => setShowPicker(false)} />
             )}
           </div>
         )}
