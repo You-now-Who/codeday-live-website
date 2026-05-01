@@ -6,6 +6,8 @@ import { BattleCard } from './BattleCard'
 import { NominationSearch } from './NominationSearch'
 import Link from 'next/link'
 
+const STREAM_URL = process.env.NEXT_PUBLIC_RADIO_STREAM_URL
+
 type Track = { id: string; spotifyId: string; title: string; artist: string; albumArt: string | null; previewUrl: string | null }
 type Battle = {
   id: string
@@ -68,6 +70,17 @@ export function VotePage({ isLoggedIn, username }: VotePageProps) {
         <h1 className="font-epilogue font-black text-5xl uppercase tracking-tight leading-none">Battle</h1>
         <p className="font-grotesk text-sm text-outline uppercase tracking-widest mt-1">Vote for the next track</p>
       </div>
+
+      {/* Radio player */}
+      {STREAM_URL && (
+        <div className="border-2 border-primary shadow-hard bg-white mb-8">
+          <div className="px-3 py-1 border-b-2 border-primary flex items-center gap-2">
+            <span className="w-1.5 h-1.5 bg-primary rounded-full animate-live-dot inline-block" />
+            <span className="font-epilogue font-black text-xs uppercase tracking-widest">Live Radio</span>
+          </div>
+          <audio src={STREAM_URL} controls autoPlay className="w-full" style={{ height: '40px' }} />
+        </div>
+      )}
 
       {/* Battle */}
       {battle ? (

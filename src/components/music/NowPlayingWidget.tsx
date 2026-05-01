@@ -7,6 +7,8 @@ import Link from 'next/link'
 type Track = { spotifyId: string; title: string; artist: string; albumArt: string | null; previewUrl: string | null }
 type NowPlayingData = { battle: { trackA: Track; trackB: Track } | null; currentTrack: Track | null }
 
+const STREAM_URL = process.env.NEXT_PUBLIC_RADIO_STREAM_URL
+
 export function NowPlayingWidget() {
   const fetcher = useCallback(() => fetch('/api/music/now-playing').then(r => r.json()) as Promise<NowPlayingData>, [])
   const { data } = usePolling<NowPlayingData>(fetcher, 4_000)
@@ -29,11 +31,28 @@ export function NowPlayingWidget() {
 
   return (
     <div className="border-2 border-primary shadow-hard bg-white">
-      <div className="px-3 py-1 border-b-2 border-primary">
+      <div className="px-3 py-1 border-b-2 border-primary flex items-center justify-between">
         <span className="font-epilogue font-black text-xs uppercase tracking-widest bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 inline-block">
           ♫ Now Playing
         </span>
+        {STREAM_URL && (
+          <span className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 bg-primary rounded-full animate-live-dot inline-block" />
+            <span className="font-grotesk text-xs text-outline uppercase tracking-widest">Live</span>
+          </span>
+        )}
       </div>
+
+      {STREAM_URL && (
+        <audio
+          src={STREAM_URL}
+          controls
+          autoPlay
+          className="w-full border-b-2 border-primary"
+          style={{ height: '36px' }}
+        />
+      )}
+
       <div className="p-4 flex items-center gap-4">
         {track ? (
           <>
