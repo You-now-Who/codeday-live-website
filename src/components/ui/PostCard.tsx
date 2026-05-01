@@ -156,7 +156,7 @@ export function PostCard({ post, accountId, canDelete, onDelete }: PostCardProps
       {post.imageUrl && (
         <div className="mx-4 mb-3 border-2 border-primary overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={post.imageUrl} alt="Post image" className="w-full object-cover max-h-80" />
+          <img src={post.imageUrl} alt="Post image" className="w-full object-contain max-h-[600px] bg-surface" />
         </div>
       )}
 
