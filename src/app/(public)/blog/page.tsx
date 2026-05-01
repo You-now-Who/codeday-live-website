@@ -16,31 +16,38 @@ export default async function BlogPage() {
   return (
     <div>
       <PageHeader title="Blog" />
-      <div className="px-6 py-6 max-w-3xl mx-auto">
+      <div className="px-6 py-8 max-w-2xl mx-auto">
         {posts.length === 0 && (
           <p className="font-grotesk text-outline">No posts yet.</p>
         )}
-        <div className="space-y-6">
-          {posts.map(post => (
+        <div className="space-y-10">
+          {posts.map((post, i) => (
             <Link key={post.id} href={`/blog/${post.id}`} className="block group">
-              <article className="bg-white border-2 border-primary shadow-hard hover:shadow-none transition-shadow">
+              <article className={`relative ${i % 2 === 0 ? 'rotate-[-0.3deg]' : 'rotate-[0.2deg]'} sticky-note p-0 overflow-hidden tape`}>
                 {post.coverImageUrl && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={post.coverImageUrl} alt="" className="w-full h-48 object-cover border-b-2 border-primary" />
+                  <img
+                    src={post.coverImageUrl}
+                    alt=""
+                    className="w-full h-52 object-cover"
+                    style={{ borderBottom: '2px solid #000' }}
+                  />
                 )}
-                <div className="p-5">
+                <div className="p-6">
                   <p className="font-grotesk text-xs text-outline uppercase tracking-widest mb-2">
                     {formatDate(post.createdAt.toISOString())}
                   </p>
-                  <h2 className="font-epilogue font-black text-2xl uppercase tracking-tight leading-tight group-hover:underline">
+                  <h2 className="font-epilogue font-black text-3xl uppercase tracking-tight leading-tight group-hover:underline decoration-2 mb-3">
                     {post.title}
                   </h2>
                   {post.excerpt && (
-                    <p className="font-grotesk text-sm text-outline mt-2 leading-relaxed">{post.excerpt}</p>
+                    <p className="font-grotesk text-sm text-on-surface/70 leading-relaxed line-clamp-3">
+                      {post.excerpt}
+                    </p>
                   )}
-                  <p className="font-epilogue font-black text-xs uppercase tracking-tight mt-4 text-primary">
-                    Read more →
-                  </p>
+                  <span className="inline-block mt-4 font-epilogue font-black text-xs uppercase tracking-tight stamp border-primary">
+                    Read →
+                  </span>
                 </div>
               </article>
             </Link>

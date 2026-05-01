@@ -2,9 +2,10 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { checkAdminKey } from '@/lib/auth'
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+  const isAdmin = checkAdminKey(req)
   const post = await prisma.blogPost.findUnique({ where: { id: params.id } })
-  if (!post || !post.published) return Response.json({ error: 'Not found' }, { status: 404 })
+  if (!post || (!post.published && !isAdmin)) return Response.json({ error: 'Not found' }, { status: 404 })
   return Response.json({ post })
 }
 

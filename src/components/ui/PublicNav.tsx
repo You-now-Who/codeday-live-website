@@ -19,10 +19,13 @@ function ScheduleIcon() {
     </svg>
   )
 }
-function ResourcesIcon() {
+function BlogIcon() {
   return (
-    <svg viewBox="0 0 20 20" className="w-4 h-4 flex-shrink-0" fill="currentColor">
-      <path d="M4 2h12v16l-6-3.5L4 18V2z" />
+    <svg viewBox="0 0 20 20" className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="2" width="14" height="16" rx="1" />
+      <line x1="6" y1="6" x2="14" y2="6" />
+      <line x1="6" y1="9" x2="14" y2="9" />
+      <line x1="6" y1="12" x2="10" y2="12" />
     </svg>
   )
 }
@@ -76,7 +79,7 @@ function PersonIcon() {
 const NAV_LINKS = [
   { href: '/',          label: 'HOME',      Icon: HomeIcon },
   { href: '/schedule',  label: 'SCHEDULE',  Icon: ScheduleIcon },
-  { href: '/resources', label: 'RESOURCES', Icon: ResourcesIcon },
+  { href: '/blog',      label: 'BLOG',      Icon: BlogIcon },
   { href: '/news',      label: 'NEWS',      Icon: NewsIcon },
   { href: '/wall',      label: 'WALL',      Icon: WallIcon },
   { href: '/help',      label: 'HELP',      Icon: HelpIcon },
