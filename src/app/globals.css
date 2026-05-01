@@ -2,11 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Dot grid body background ──────────────────────────────────────────────── */
+/* ─── Graph paper body background ───────────────────────────────────────────── */
 
 @layer base {
   body {
-    background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+    background-image:
+      linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 }
@@ -48,6 +50,19 @@
   -webkit-backface-visibility: hidden;
 }
 
+/* ─── Torn bottom small (post cards) ───────────────────────────────────────── */
+
+.torn-bottom-sm {
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 94%,
+    95% 97%, 90% 93%, 85% 98%, 80% 94%,
+    75% 99%, 70% 95%, 65% 100%, 60% 96%,
+    55% 100%, 50% 95%, 45% 99%, 40% 94%,
+    35% 98%, 30% 93%, 25% 97%, 20% 93%,
+    15% 97%, 10% 93%, 5% 97%, 0% 94%
+  );
+}
+
 /* ─── High-contrast dither effect ──────────────────────────────────────────── */
 
 .dither {
@@ -68,6 +83,149 @@
   background-size: 128px 128px;
 }
 
+/* ─── Washi tape strip ──────────────────────────────────────────────────────── */
+
+.tape {
+  position: relative;
+}
+.tape::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 64px;
+  height: 18px;
+  background: rgba(195, 244, 0, 0.65);
+  border-left: 1px solid rgba(0,0,0,0.08);
+  border-right: 1px solid rgba(0,0,0,0.08);
+  z-index: 1;
+}
+
+.tape-h::before {
+  width: 90px;
+  height: 14px;
+  top: -8px;
+  transform: translateX(-50%) rotate(1deg);
+}
+
+.tape-corner {
+  position: relative;
+}
+.tape-corner::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: -12px;
+  width: 48px;
+  height: 14px;
+  background: rgba(195, 244, 0, 0.7);
+  transform: rotate(-45deg);
+  z-index: 1;
+}
+
+/* ─── Push-pin decoration ───────────────────────────────────────────────────── */
+
+.pin {
+  position: relative;
+}
+.pin::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background: #000;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  z-index: 2;
+}
+
+/* ─── Organic/wobbly border ─────────────────────────────────────────────────── */
+
+.sketch-box {
+  border-radius: 2px 4px 3px 2px / 3px 2px 4px 3px;
+}
+
+/* ─── Sticky note card ──────────────────────────────────────────────────────── */
+
+.sticky-note {
+  background: #fffde7;
+  box-shadow: 2px 3px 8px rgba(0,0,0,0.12), 1px 1px 0 rgba(0,0,0,0.05);
+  border-radius: 1px 3px 2px 1px / 2px 1px 3px 2px;
+}
+
+/* ─── Index card (ruled lines) ──────────────────────────────────────────────── */
+
+.index-card {
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 23px,
+    rgba(0,0,0,0.07) 23px,
+    rgba(0,0,0,0.07) 24px
+  );
+  background-color: #fafafa;
+  border-radius: 1px 4px 2px 3px / 3px 2px 4px 1px;
+  position: relative;
+}
+
+.index-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 20px 20px;
+  border-color: transparent transparent rgba(0,0,0,0.08) transparent;
+}
+
+/* ─── Kraft paper background ────────────────────────────────────────────────── */
+
+.kraft {
+  background-color: #f5e6c8;
+}
+
+/* ─── Highlighter text effect ───────────────────────────────────────────────── */
+
+.highlighter {
+  background: linear-gradient(transparent 40%, rgba(195, 244, 0, 0.6) 40%);
+  padding: 0 2px;
+}
+
+/* ─── Rubber stamp label ────────────────────────────────────────────────────── */
+
+.stamp {
+  display: inline-block;
+  border: 2px solid currentColor;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.85;
+  transform: rotate(-1.5deg);
+  mix-blend-mode: multiply;
+}
+
+/* ─── Paper clip decoration ─────────────────────────────────────────────────── */
+
+.paper-clip {
+  position: relative;
+}
+.paper-clip::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: 20px;
+  width: 6px;
+  height: 28px;
+  border: 2px solid rgba(0,0,0,0.3);
+  border-radius: 3px;
+  background: transparent;
+  transform: rotate(8deg);
+}
+
 /* ─── Button press effect ───────────────────────────────────────────────────── */
 
 .btn-press {
@@ -75,26 +233,26 @@
 }
 
 .btn-press:hover {
-  transform: translate(4px, 4px);
+  transform: translate(3px, 3px) rotate(0.3deg);
   box-shadow: none;
 }
 
-/* ─── Card hover lift ───────────────────────────────────────────────────────── */
+/* ─── Card hover lift (paper peel) ──────────────────────────────────────────── */
 
 .card-lift {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-lift:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
+  transform: translate(-3px, -4px) rotate(0.5deg);
+  box-shadow: 5px 8px 16px rgba(0,0,0,0.15);
 }
 
 /* ─── Collage offset rotations ──────────────────────────────────────────────── */
 
-.offset-1 { transform: rotate(-1.5deg) translate(-2px, 1px); }
-.offset-2 { transform: rotate(1deg) translate(2px, -1px); }
-.offset-3 { transform: rotate(-0.5deg) translate(1px, 2px); }
+.offset-1 { transform: rotate(-2deg) translate(-3px, 1px); }
+.offset-2 { transform: rotate(1.5deg) translate(3px, -2px); }
+.offset-3 { transform: rotate(-0.8deg) translate(1px, 3px); }
 
 /* ─── Hand-drawn circle for icon buttons ────────────────────────────────────── */
 
@@ -135,6 +293,22 @@
   50%       { transform: rotate(3deg); }
 }
 
+@keyframes stamp-appear {
+  0%   { transform: scale(1.4) rotate(-3deg); opacity: 0; }
+  60%  { transform: scale(0.95) rotate(-1deg); opacity: 1; }
+  100% { transform: scale(1) rotate(-1.5deg); opacity: 0.85; }
+}
+
+@keyframes tape-stick {
+  0%   { transform: translateX(-50%) rotate(-8deg) scaleY(0.3); opacity: 0; }
+  100% { transform: translateX(-50%) rotate(-2deg) scaleY(1); opacity: 1; }
+}
+
+@keyframes peel {
+  0%, 100% { transform: rotate(-1.5deg) translate(-2px, 1px); }
+  50%       { transform: rotate(-1.8deg) translate(-3px, -1px); }
+}
+
 /* Animation utility classes */
 
 .animate-fade-up          { animation: fade-up 0.45s ease both; }
@@ -143,6 +317,8 @@
 .animate-float-b          { animation: float-b 5.5s ease-in-out infinite; }
 .animate-spin-slow        { animation: spin-slow 12s linear infinite; }
 .animate-wiggle           { animation: wiggle 0.6s ease-in-out infinite; }
+.animate-stamp-appear     { animation: stamp-appear 0.35s ease both; }
+.animate-peel             { animation: peel 3s ease-in-out infinite; }
 
 /* Staggered animation delays */
 .stagger-1  { animation-delay: 0.05s; }

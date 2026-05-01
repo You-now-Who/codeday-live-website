@@ -27,15 +27,19 @@ export function NewsCard({ post }: NewsCardProps) {
 
   return (
     <div
-      className={`border-2 border-primary shadow-hard p-5 card-lift ${rotation} ${
-        isAnnouncement ? 'bg-secondary-fixed' : 'bg-white'
+      className={`p-5 card-lift ${rotation} tape ${
+        isAnnouncement
+          ? 'bg-secondary-fixed shadow-paper-lg sketch-box'
+          : 'sticky-note'
       }`}
     >
       {post.pinned && (
-        <div className="mb-2">
-          <span className="font-epilogue font-bold text-xs uppercase bg-primary text-on-primary px-2 py-0.5 rotate-[1deg] inline-block">
-            PINNED
-          </span>
+        <div className="flex items-center gap-1 mb-2">
+          <svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor" className="text-primary opacity-70">
+            <ellipse cx="5" cy="4" rx="4" ry="4" />
+            <rect x="4" y="7" width="2" height="7" rx="1" />
+          </svg>
+          <span className="font-grotesk text-xs text-primary/60 uppercase tracking-wider">pinned</span>
         </div>
       )}
       <Chip label={post.type} className="mb-3" />
@@ -44,14 +48,14 @@ export function NewsCard({ post }: NewsCardProps) {
         <img
           src={post.imageUrl}
           alt=""
-          className="dither w-full mb-3 border-2 border-primary"
+          className="dither w-full mb-3 border-2 border-primary sketch-box"
         />
       )}
       <h3 className="font-epilogue font-black text-xl uppercase tracking-tight leading-none mb-2">
         {post.headline}
       </h3>
       <p className="font-grotesk text-sm text-on-surface leading-relaxed">{post.body}</p>
-      <p className="font-grotesk text-xs text-outline mt-3 uppercase tracking-widest">
+      <p className="font-grotesk text-xs text-outline mt-3 uppercase tracking-widest stamp">
         {new Date(post.createdAt).toLocaleDateString()}
       </p>
     </div>

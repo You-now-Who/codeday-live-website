@@ -6,7 +6,7 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       <PublicNav />
-      <main className="min-h-screen">
+      <main className="min-h-screen bg-[#fdfcf9]">
         {children}
       </main>
     </div>
