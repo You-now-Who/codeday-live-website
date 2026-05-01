@@ -9,12 +9,21 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal'
 type ScheduleItem = { id: string; title: string; description: string | null; location: string | null; startsAt: string; endsAt: string | null }
 type Status = 'past' | 'current' | 'upcoming'
 
-function getStatus(item: ScheduleItem): Status {
+function getStatus(item: ScheduleItem, allItems: ScheduleItem[]): Status {
   const now = new Date()
   const start = new Date(item.startsAt)
-  const end = item.endsAt ? new Date(item.endsAt) : null
+  let end = item.endsAt ? new Date(item.endsAt) : null
+
+  if (!end) {
+    const sorted = [...allItems].sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime())
+    const idx = sorted.findIndex(i => i.id === item.id)
+    if (idx !== -1 && idx < sorted.length - 1) {
+      end = new Date(sorted[idx + 1].startsAt)
+    }
+  }
+
   if (end && now > end) return 'past'
-  if (now >= start && (end == null || now <= end)) return 'current'
+  if (now >= start && (!end || now <= end)) return 'current'
   return 'upcoming'
 }
 
@@ -35,7 +44,7 @@ export function ScheduleClient({ initialItems }: { initialItems: ScheduleItem[] 
         )}
         {items.map((item, i) => (
           <ScrollReveal key={item.id} delay={i * 40}>
-            <ScheduleCard item={item} status={getStatus(item)} />
+            <ScheduleCard item={item} status={getStatus(item, items)} />
           </ScrollReveal>
         ))}
       </div>

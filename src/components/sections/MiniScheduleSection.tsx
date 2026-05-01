@@ -11,12 +11,21 @@ type ScheduleItem = {
 
 type Status = 'past' | 'current' | 'upcoming'
 
-function getStatus(item: ScheduleItem): Status {
+function getStatus(item: ScheduleItem, allItems: ScheduleItem[]): Status {
   const now = new Date()
   const start = new Date(item.startsAt)
-  const end = item.endsAt ? new Date(item.endsAt) : null
+  let end = item.endsAt ? new Date(item.endsAt) : null
+
+  if (!end) {
+    const sorted = [...allItems].sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime())
+    const idx = sorted.findIndex(i => i.id === item.id)
+    if (idx !== -1 && idx < sorted.length - 1) {
+      end = new Date(sorted[idx + 1].startsAt)
+    }
+  }
+
   if (end && now > end) return 'past'
-  if (now >= start && (end == null || now <= end)) return 'current'
+  if (now >= start && (!end || now <= end)) return 'current'
   return 'upcoming'
 }
 
@@ -75,7 +84,7 @@ export function MiniScheduleSection({ items }: MiniScheduleSectionProps) {
               <div className="absolute left-[13px] top-3 bottom-3 w-px bg-primary/15" />
               <div className="space-y-1">
                 {dayItems.map(item => {
-                  const status = getStatus(item)
+                  const status = getStatus(item, items)
                   const isPast = status === 'past'
                   const isCurrent = status === 'current'
 

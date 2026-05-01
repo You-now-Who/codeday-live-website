@@ -11,12 +11,21 @@ type ScheduleItem = {
 
 type Status = 'past' | 'current' | 'upcoming'
 
-function getStatus(item: ScheduleItem): Status {
+function getStatus(item: ScheduleItem, allItems: ScheduleItem[]): Status {
   const now = new Date()
   const start = new Date(item.startsAt)
-  const end = item.endsAt ? new Date(item.endsAt) : null
+  let end = item.endsAt ? new Date(item.endsAt) : null
+
+  if (!end) {
+    const sorted = [...allItems].sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime())
+    const idx = sorted.findIndex(i => i.id === item.id)
+    if (idx !== -1 && idx < sorted.length - 1) {
+      end = new Date(sorted[idx + 1].startsAt)
+    }
+  }
+
   if (end && now > end) return 'past'
-  if (now >= start && (end == null || now <= end)) return 'current'
+  if (now >= start && (!end || now <= end)) return 'current'
   return 'upcoming'
 }
 
@@ -75,7 +84,7 @@ interface CompactScheduleSectionProps {
 export function CompactScheduleSection({ items }: CompactScheduleSectionProps) {
   if (items.length === 0) return null
 
-  const statuses = items.map(item => ({ item, status: getStatus(item) }))
+  const statuses = items.map(item => ({ item, status: getStatus(item, items) }))
 
   // Find anchor: current item, or next upcoming if nothing current
   const currentIdx = statuses.findIndex(s => s.status === 'current')
