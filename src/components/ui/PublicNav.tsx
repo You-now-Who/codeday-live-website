@@ -92,6 +92,7 @@ type Me = { username: string; displayName: string | null; role: string } | null
 export function PublicNav() {
   const pathname = usePathname()
   const [me, setMe] = useState<Me | undefined>(undefined)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     fetch('/api/teams/me')
@@ -100,59 +101,124 @@ export function PublicNav() {
       .catch(() => setMe(null))
   }, [pathname])
 
+  // Close drawer on route change
+  useEffect(() => { setOpen(false) }, [pathname])
+
   const label = me ? (me.displayName ?? me.username).slice(0, 12) : 'LOGIN'
   const isProfileActive = pathname === '/profile' || pathname === '/login'
+  const allLinks = [...NAV_LINKS, ...(me?.role === 'MENTOR' || me?.role === 'ADMIN' ? [{ href: '/mentor', label: 'MENTOR', Icon: MentorIcon }] : [])]
 
   return (
-    <nav className="sticky top-0 z-40 bg-kraft border-b-2 border-primary flex items-stretch">
-      {/* Scissors cut line decoration */}
-      <div className="flex-shrink-0 flex items-center px-2 border-r border-primary/20 text-primary/30 font-grotesk text-xs select-none" aria-hidden>
-        ✂
-      </div>
+    <>
+      {/* ── Mobile: sticky top bar + slide-down drawer ── */}
+      <div className="md:hidden">
+        <div className="sticky top-0 z-40 bg-kraft border-b-2 border-primary flex items-center justify-between px-3 h-12">
+          {/* Logo */}
+          <span className="font-epilogue font-black text-xs uppercase tracking-widest bg-secondary-fixed text-on-secondary-fixed px-2 py-1 inline-block rotate-[-1deg] mix-blend-multiply">
+            CODEDAY
+          </span>
+          <button
+            onClick={() => setOpen(o => !o)}
+            className="font-epilogue font-black text-lg w-9 h-9 flex items-center justify-center hover:bg-primary/10 transition-colors"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+          >
+            {open ? '✕' : '☰'}
+          </button>
+        </div>
 
-      {/* Logo */}
-      <div className="flex-shrink-0 flex items-center border-r-2 border-primary px-3">
-        <span className="font-epilogue font-black text-xs uppercase tracking-widest bg-secondary-fixed text-on-secondary-fixed px-2 py-1 inline-block rotate-[-1deg] mix-blend-multiply">
-          CODEDAY
-        </span>
-      </div>
-
-      {/* Nav links — scrollable */}
-      <div className="flex overflow-x-auto flex-1 scrollbar-none">
-        {[...NAV_LINKS, ...(me?.role === 'MENTOR' || me?.role === 'ADMIN' ? [{ href: '/mentor', label: 'MENTOR', Icon: MentorIcon }] : [])].map(({ href, label: navLabel, Icon }, i) => {
-          const isActive = pathname === href
-          const tabRotation = TAB_ROTATIONS[i % TAB_ROTATIONS.length]
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={`flex-shrink-0 px-3 py-3 font-epilogue font-bold text-xs uppercase tracking-tight flex items-center gap-1.5 border-r border-primary/10 transition-all duration-150 sketch-box ${tabRotation} ${
-                isActive
-                  ? 'bg-secondary-fixed text-on-secondary-fixed tape'
-                  : 'bg-paper text-primary border border-primary/20 hover:rotate-0'
-              }`}
-            >
-              <Icon />
-              <span className="hidden sm:inline">{navLabel}</span>
-            </Link>
-          )
-        })}
-      </div>
-
-      {/* Login / Profile — sticky label style */}
-      <Link
-        href={me ? '/profile' : '/login'}
-        className={`flex-shrink-0 flex items-center gap-1.5 px-4 border-l-2 border-primary font-epilogue font-bold text-xs uppercase tracking-tight transition-colors rounded-sticker ${
-          isProfileActive
-            ? 'bg-secondary-fixed text-on-secondary-fixed'
-            : 'hover:bg-secondary-fixed hover:text-on-secondary-fixed text-primary'
-        }`}
-      >
-        <PersonIcon />
-        {me !== undefined && (
-          <span className="hidden sm:inline truncate max-w-[80px]">{label}</span>
+        {open && (
+          <div
+            className="fixed inset-x-0 top-12 bottom-0 bg-kraft border-t-2 border-primary z-30 overflow-y-auto flex flex-col"
+            onClick={() => setOpen(false)}
+          >
+            <ul className="flex flex-col flex-1">
+              {allLinks.map(({ href, label: navLabel, Icon }) => {
+                const isActive = pathname === href
+                return (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      className={`flex items-center gap-3 px-6 py-4 font-epilogue font-bold text-base uppercase tracking-tight border-b border-primary/10 transition-colors ${
+                        isActive
+                          ? 'bg-secondary-fixed text-on-secondary-fixed'
+                          : 'hover:bg-primary/5 text-primary'
+                      }`}
+                    >
+                      <Icon />
+                      {navLabel}
+                    </Link>
+                  </li>
+                )
+              })}
+              <li>
+                <Link
+                  href={me ? '/profile' : '/login'}
+                  className={`flex items-center gap-3 px-6 py-4 font-epilogue font-bold text-base uppercase tracking-tight border-b border-primary/10 transition-colors ${
+                    isProfileActive
+                      ? 'bg-secondary-fixed text-on-secondary-fixed'
+                      : 'hover:bg-primary/5 text-primary'
+                  }`}
+                >
+                  <PersonIcon />
+                  {me !== undefined ? label : 'LOGIN'}
+                </Link>
+              </li>
+            </ul>
+          </div>
         )}
-      </Link>
-    </nav>
+      </div>
+
+      {/* ── Desktop: horizontal scrolling nav bar ── */}
+      <nav className="hidden md:flex sticky top-0 z-40 bg-kraft border-b-2 border-primary items-stretch">
+        {/* Scissors cut line decoration */}
+        <div className="flex-shrink-0 flex items-center px-2 border-r border-primary/20 text-primary/30 font-grotesk text-xs select-none" aria-hidden>
+          ✂
+        </div>
+
+        {/* Logo */}
+        <div className="flex-shrink-0 flex items-center border-r-2 border-primary px-3">
+          <span className="font-epilogue font-black text-xs uppercase tracking-widest bg-secondary-fixed text-on-secondary-fixed px-2 py-1 inline-block rotate-[-1deg] mix-blend-multiply">
+            CODEDAY
+          </span>
+        </div>
+
+        {/* Nav links — scrollable */}
+        <div className="flex overflow-x-auto flex-1 scrollbar-none">
+          {allLinks.map(({ href, label: navLabel, Icon }, i) => {
+            const isActive = pathname === href
+            const tabRotation = TAB_ROTATIONS[i % TAB_ROTATIONS.length]
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`flex-shrink-0 px-3 py-3 font-epilogue font-bold text-xs uppercase tracking-tight flex items-center gap-1.5 border-r border-primary/10 transition-all duration-150 sketch-box ${tabRotation} ${
+                  isActive
+                    ? 'bg-secondary-fixed text-on-secondary-fixed tape'
+                    : 'bg-paper text-primary border border-primary/20 hover:rotate-0'
+                }`}
+              >
+                <Icon />
+                <span>{navLabel}</span>
+              </Link>
+            )
+          })}
+        </div>
+
+        {/* Login / Profile */}
+        <Link
+          href={me ? '/profile' : '/login'}
+          className={`flex-shrink-0 flex items-center gap-1.5 px-4 border-l-2 border-primary font-epilogue font-bold text-xs uppercase tracking-tight transition-colors rounded-sticker ${
+            isProfileActive
+              ? 'bg-secondary-fixed text-on-secondary-fixed'
+              : 'hover:bg-secondary-fixed hover:text-on-secondary-fixed text-primary'
+          }`}
+        >
+          <PersonIcon />
+          {me !== undefined && (
+            <span className="truncate max-w-[80px]">{label}</span>
+          )}
+        </Link>
+      </nav>
+    </>
   )
 }
