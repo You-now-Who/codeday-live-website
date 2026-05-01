@@ -132,7 +132,7 @@ export function PostCard({ post, accountId, canDelete, onDelete }: PostCardProps
     .sort((a, b) => b[1] - a[1])
 
   return (
-    <article className="bg-white shadow-paper sketch-box torn-bottom-sm">
+    <article className="bg-white shadow-paper sketch-box torn-bottom-sm pb-7">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 pt-4 pb-3">
         <span className={`w-9 h-9 flex-shrink-0 flex items-center justify-center font-epilogue font-black text-xs ${badgeBg}`} style={{ borderRadius: '50% 45% 48% 50% / 50% 48% 45% 50%' }}>
