@@ -127,16 +127,15 @@ export function PostCard({ post, accountId, canDelete, onDelete }: PostCardProps
     onDelete?.(post.id)
   }
 
-  // Sorted: emojis with counts, highest first
   const activeEmojis = Object.entries(reactions.counts)
     .filter(([, c]) => c > 0)
     .sort((a, b) => b[1] - a[1])
 
   return (
-    <article className="bg-white border-2 border-primary shadow-hard">
+    <article className="bg-white shadow-paper sketch-box torn-bottom-sm">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 pt-4 pb-3">
-        <span className={`w-9 h-9 flex-shrink-0 flex items-center justify-center font-epilogue font-black text-xs ${badgeBg}`}>
+        <span className={`w-9 h-9 flex-shrink-0 flex items-center justify-center font-epilogue font-black text-xs ${badgeBg}`} style={{ borderRadius: '50% 45% 48% 50% / 50% 48% 45% 50%' }}>
           {initials(displayName)}
         </span>
         <div className="flex-1 min-w-0">
@@ -168,10 +167,10 @@ export function PostCard({ post, accountId, canDelete, onDelete }: PostCardProps
             key={emoji}
             onClick={() => toggleReaction(emoji)}
             disabled={!accountId}
-            className={`flex items-center gap-1 px-2 py-1 font-grotesk text-xs border transition-colors ${
+            className={`flex items-center gap-1 px-2 py-1 font-grotesk text-xs border transition-colors sketch-box ${
               reactions.mine.has(emoji)
-                ? 'border-primary bg-secondary-fixed text-on-secondary-fixed'
-                : 'border-primary/20 hover:border-primary hover:bg-surface'
+                ? 'border-primary bg-secondary-fixed text-on-secondary-fixed hover:bg-secondary-fixed hover:text-on-secondary-fixed hover:border-secondary-fixed'
+                : 'border-primary/20 hover:border-primary hover:bg-secondary-fixed hover:text-on-secondary-fixed hover:border-secondary-fixed'
             } ${!accountId ? 'cursor-default' : ''}`}
           >
             <span>{emoji}</span>
@@ -183,7 +182,7 @@ export function PostCard({ post, accountId, canDelete, onDelete }: PostCardProps
           <div className="relative">
             <button
               onClick={() => setShowPicker(s => !s)}
-              className="flex items-center px-2 py-1 font-grotesk text-xs border border-dashed border-primary/40 hover:border-primary transition-colors text-outline hover:text-primary"
+              className="flex items-center px-2 py-1 font-grotesk text-xs border border-dashed border-primary/40 hover:border-primary transition-colors text-outline hover:text-primary sketch-box"
               aria-label="Add reaction"
             >
               + React
@@ -243,13 +242,13 @@ export function PostCard({ post, accountId, canDelete, onDelete }: PostCardProps
                     value={commentBody}
                     onChange={e => setCommentBody(e.target.value)}
                     placeholder="Add a comment…"
-                    className="flex-1 border-2 border-primary px-2 py-1 font-grotesk text-xs focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white"
+                    className="flex-1 border-0 border-b-2 border-secondary-fixed bg-transparent px-0 py-1 font-grotesk text-xs focus:outline-none caret-[#c3f400]"
                     maxLength={500}
                   />
                   <button
                     type="submit"
                     disabled={commentLoading || !commentBody.trim()}
-                    className="font-epilogue font-black text-xs uppercase border-2 border-primary px-3 py-1 hover:bg-secondary-fixed hover:border-secondary-fixed hover:text-on-secondary-fixed transition-colors disabled:opacity-40"
+                    className="font-epilogue font-black text-xs uppercase border-2 border-primary px-3 py-1 hover:bg-secondary-fixed hover:border-secondary-fixed hover:text-on-secondary-fixed transition-colors disabled:opacity-40 stamp sketch-box"
                   >
                     Post
                   </button>

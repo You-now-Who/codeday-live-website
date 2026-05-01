@@ -82,6 +82,8 @@ const NAV_LINKS = [
   { href: '/help',      label: 'HELP',      Icon: HelpIcon },
 ]
 
+const TAB_ROTATIONS = ['rotate-[-0.5deg]', 'rotate-[0.3deg]', 'rotate-[-0.4deg]', 'rotate-[0.5deg]', 'rotate-[-0.3deg]', 'rotate-[0.4deg]', 'rotate-[-0.5deg]']
+
 type Me = { username: string; displayName: string | null; role: string } | null
 
 export function PublicNav() {
@@ -99,26 +101,32 @@ export function PublicNav() {
   const isProfileActive = pathname === '/profile' || pathname === '/login'
 
   return (
-    <nav className="sticky top-0 z-40 bg-white border-b-2 border-primary flex items-stretch">
+    <nav className="sticky top-0 z-40 bg-kraft border-b-2 border-primary flex items-stretch">
+      {/* Scissors cut line decoration */}
+      <div className="flex-shrink-0 flex items-center px-2 border-r border-primary/20 text-primary/30 font-grotesk text-xs select-none" aria-hidden>
+        ✂
+      </div>
+
       {/* Logo */}
       <div className="flex-shrink-0 flex items-center border-r-2 border-primary px-3">
-        <span className="font-epilogue font-black text-xs uppercase tracking-widest bg-secondary-fixed text-on-secondary-fixed px-2 py-1 inline-block">
+        <span className="font-epilogue font-black text-xs uppercase tracking-widest bg-secondary-fixed text-on-secondary-fixed px-2 py-1 inline-block rotate-[-1deg] mix-blend-multiply">
           CODEDAY
         </span>
       </div>
 
       {/* Nav links — scrollable */}
       <div className="flex overflow-x-auto flex-1 scrollbar-none">
-        {[...NAV_LINKS, ...(me?.role === 'MENTOR' || me?.role === 'ADMIN' ? [{ href: '/mentor', label: 'MENTOR', Icon: MentorIcon }] : [])].map(({ href, label: navLabel, Icon }) => {
+        {[...NAV_LINKS, ...(me?.role === 'MENTOR' || me?.role === 'ADMIN' ? [{ href: '/mentor', label: 'MENTOR', Icon: MentorIcon }] : [])].map(({ href, label: navLabel, Icon }, i) => {
           const isActive = pathname === href
+          const tabRotation = TAB_ROTATIONS[i % TAB_ROTATIONS.length]
           return (
             <Link
               key={href}
               href={href}
-              className={`flex-shrink-0 px-3 py-3 font-epilogue font-bold text-xs uppercase tracking-tight flex items-center gap-1.5 border-r border-primary/10 transition-colors ${
+              className={`flex-shrink-0 px-3 py-3 font-epilogue font-bold text-xs uppercase tracking-tight flex items-center gap-1.5 border-r border-primary/10 transition-all duration-150 sketch-box ${tabRotation} ${
                 isActive
-                  ? 'bg-secondary-fixed text-on-secondary-fixed'
-                  : 'text-primary hover:bg-surface'
+                  ? 'bg-secondary-fixed text-on-secondary-fixed tape'
+                  : 'bg-paper text-primary border border-primary/20 hover:rotate-0'
               }`}
             >
               <Icon />
@@ -128,13 +136,13 @@ export function PublicNav() {
         })}
       </div>
 
-      {/* Login / Profile — pinned right */}
+      {/* Login / Profile — sticky label style */}
       <Link
         href={me ? '/profile' : '/login'}
-        className={`flex-shrink-0 flex items-center gap-1.5 px-4 border-l-2 border-primary font-epilogue font-bold text-xs uppercase tracking-tight transition-colors ${
+        className={`flex-shrink-0 flex items-center gap-1.5 px-4 border-l-2 border-primary font-epilogue font-bold text-xs uppercase tracking-tight transition-colors rounded-sticker ${
           isProfileActive
             ? 'bg-secondary-fixed text-on-secondary-fixed'
-            : 'hover:bg-surface text-primary'
+            : 'hover:bg-secondary-fixed hover:text-on-secondary-fixed text-primary'
         }`}
       >
         <PersonIcon />

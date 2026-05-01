@@ -44,17 +44,19 @@ model NewsPost {
 }
 
 // ---------------------------------------------------------------------------
-// ResourceLink
+// BlogPost
 // ---------------------------------------------------------------------------
-model ResourceLink {
-  id          String   @id @default(cuid())
-  title       String   @db.VarChar(200)
-  url         String   @db.VarChar(2048)
-  description String?  @db.Text
-  category    String   @db.VarChar(50)
-  createdAt   DateTime @default(now())
+model BlogPost {
+  id            String   @id @default(cuid())
+  title         String   @db.VarChar(300)
+  body          String   @db.Text
+  excerpt       String?  @db.VarChar(500)
+  coverImageUrl String?  @db.VarChar(2048)
+  published     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  @@index([category])
+  @@index([published, createdAt])
 }
 
 // ---------------------------------------------------------------------------
