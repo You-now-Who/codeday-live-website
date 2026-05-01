@@ -1,19 +1,34 @@
 import { prisma } from '@/lib/prisma'
+import { getActiveBattle } from '@/lib/battle'
+import { AdminAdvanceButton } from '@/components/music/AdminAdvanceButton'
 
 async function getAdminData() {
-  const [config, scheduleCount, newsCount, resourcesCount, projectsCount, helpPending] = await Promise.all([
+  const [config, scheduleCount, newsCount, resourcesCount, projectsCount, helpPending, activeBattle] = await Promise.all([
     prisma.eventConfig.findUnique({ where: { id: '1' } }),
     prisma.scheduleItem.count(),
     prisma.newsPost.count(),
     prisma.resourceLink.count(),
     prisma.project.count(),
     prisma.helpRequest.count({ where: { status: 'PENDING' } }),
+    getActiveBattle().catch(() => null),
   ])
-  return { config, counts: { schedule: scheduleCount, news: newsCount, resources: resourcesCount, projects: projectsCount, helpPending } }
+
+  const battleInfo = activeBattle ? {
+    id: activeBattle.id,
+    status: activeBattle.status as 'ACTIVE' | 'DONE' | 'PENDING',
+    trackA: { title: activeBattle.trackA.title, artist: activeBattle.trackA.artist },
+    trackB: { title: activeBattle.trackB.title, artist: activeBattle.trackB.artist },
+    voteCounts: {
+      trackAVotes: activeBattle.votes.filter(v => v.pickedId === activeBattle.trackAId).length,
+      trackBVotes: activeBattle.votes.filter(v => v.pickedId === activeBattle.trackBId).length,
+    },
+  } : null
+
+  return { config, counts: { schedule: scheduleCount, news: newsCount, resources: resourcesCount, projects: projectsCount, helpPending }, battleInfo }
 }
 
 export default async function AdminDashboardPage() {
-  const { config, counts } = await getAdminData()
+  const { config, counts, battleInfo } = await getAdminData()
 
   const statCards = [
     { label: 'Schedule Items', count: counts.schedule,    href: '/admin/schedule' },
@@ -55,6 +70,8 @@ export default async function AdminDashboardPage() {
           </a>
         </div>
       )}
+
+      <AdminAdvanceButton initialBattle={battleInfo} adminKey={process.env.ADMIN_SECRET ?? ''} />
     </div>
   )
 }

@@ -58,6 +58,13 @@ function HelpIcon() {
     </svg>
   )
 }
+function MusicIcon() {
+  return (
+    <svg viewBox="0 0 20 20" className="w-4 h-4 flex-shrink-0" fill="currentColor" aria-hidden>
+      <path d="M8 3v10.18A4 4 0 1 0 10 17V7h4V3H8z"/>
+    </svg>
+  )
+}
 function MentorIcon() {
   return (
     <svg viewBox="0 0 20 20" className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
@@ -82,6 +89,7 @@ const NAV_LINKS = [
   { href: '/blog',      label: 'BLOG',      Icon: BlogIcon },
   { href: '/news',      label: 'NEWS',      Icon: NewsIcon },
   { href: '/wall',      label: 'WALL',      Icon: WallIcon },
+  { href: '/vote',      label: 'VOTE',      Icon: MusicIcon },
   { href: '/help',      label: 'HELP',      Icon: HelpIcon },
 ]
 

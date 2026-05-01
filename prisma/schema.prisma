@@ -211,3 +211,69 @@ model EventConfig {
   submitCode         String?  @db.VarChar(50)
   updatedAt          DateTime @updatedAt
 }
+
+// ---------------------------------------------------------------------------
+// Music Voting
+// ---------------------------------------------------------------------------
+
+enum BattleStatus {
+  PENDING
+  ACTIVE
+  DONE
+}
+
+model MusicTrack {
+  id           String   @id @default(cuid())
+  spotifyId    String   @unique @db.VarChar(64)
+  title        String   @db.VarChar(300)
+  artist       String   @db.VarChar(300)
+  albumArt     String?  @db.VarChar(2048)
+  previewUrl   String?  @db.VarChar(2048)
+  nominatedBy  String?  @db.VarChar(100)
+  createdAt    DateTime @default(now())
+
+  battlesAsA MusicBattle[] @relation("TrackA")
+  battlesAsB MusicBattle[] @relation("TrackB")
+  battlesWon MusicBattle[] @relation("Winner")
+}
+
+model MusicBattle {
+  id        String        @id @default(cuid())
+  status    BattleStatus  @default(PENDING)
+  trackAId  String
+  trackBId  String
+  winnerId  String?
+  startedAt DateTime?
+  endedAt   DateTime?
+  createdAt DateTime      @default(now())
+
+  trackA MusicTrack  @relation("TrackA", fields: [trackAId], references: [id])
+  trackB MusicTrack  @relation("TrackB", fields: [trackBId], references: [id])
+  winner MusicTrack? @relation("Winner", fields: [winnerId], references: [id])
+  votes  BattleVote[]
+
+  @@index([status])
+}
+
+model BattleVote {
+  id            String   @id @default(cuid())
+  battleId      String
+  teamAccountId String
+  pickedId      String
+  createdAt     DateTime @default(now())
+
+  battle MusicBattle @relation(fields: [battleId], references: [id], onDelete: Cascade)
+
+  @@unique([battleId, teamAccountId])
+  @@index([battleId])
+}
+
+model FallbackTrack {
+  id         String   @id @default(cuid())
+  spotifyId  String   @unique @db.VarChar(64)
+  title      String   @db.VarChar(300)
+  artist     String   @db.VarChar(300)
+  albumArt   String?  @db.VarChar(2048)
+  previewUrl String   @db.VarChar(2048)
+  createdAt  DateTime @default(now())
+}

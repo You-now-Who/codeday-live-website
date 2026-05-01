@@ -11,6 +11,7 @@ import { Footer } from './Footer'
 import { LocationSection } from './LocationSection'
 import { ContactSection } from './ContactSection'
 import { QuickLinksSection } from './QuickLinksSection'
+import { NowPlayingWidget } from '@/components/music/NowPlayingWidget'
 import Link from 'next/link'
 
 type Sponsor = { name: string; url?: string; tier?: string; logoUrl?: string }
@@ -71,6 +72,11 @@ export function HomeClient({ initialConfig, initialSchedule }: HomeClientProps) 
       <HeroSection config={activeConfig} />
 
       <div className="px-6 py-10 max-w-3xl mx-auto space-y-10">
+
+        {/* — Now Playing — */}
+        <ScrollReveal>
+          <NowPlayingWidget />
+        </ScrollReveal>
 
         {/* — Happening now / up next — */}
         {(currentItem || nextItem) && (
